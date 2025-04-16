@@ -3,7 +3,7 @@
     <div class="number">#</div>
     <div class="coverImg">封面</div>
     <div class="title">标题</div>
-    <div class="action-buttons">按钮</div>
+    <div class="action-buttons"></div>
     <div class="trackCount">歌曲数</div>
     <div class="creatorName">创建者</div>
     <div class="bookCount">收藏</div>
@@ -79,51 +79,17 @@ onMounted(
 <style scoped lang="scss">
 $transitionTime: 0.3s;
 
-.list-header {
-  display: flex;
-  align-items: center;
-  padding: 12px 16px;
-  background-color: white;
-  font-weight: bold;
-  border-bottom: 2px solid #ddd;
-  position: sticky;
-  top: 0;
-  z-index: 10;
-  /* 表头的每个元素布局要跟 list-item 一致 */
-  > div {
-    display: flex;
-    align-items: center;
-    min-width: 0;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-    overflow: hidden;
-  }
+.list-item:hover {
+  background-color: rgba(128, 128, 128, 0.2);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 
-  .number {
-    flex: 0 0 30px;
-    justify-content: center;
-  }
-
-  .coverImg {
-    flex: 0 0 auto;
-    margin: 0 12px;
-  }
-
-  .title {
-    flex: 2;
-  }
-
-  .trackCount,
-  .creatorName,
-  .bookCount,
-  .playCount {
-    flex: 1;
-    min-width: 60px;
+  .action-buttons {
+    opacity: 1;
+    visibility: visible; /* 鼠标悬浮时显示 */
   }
 }
 
-
-.list-item {
+.list-header, .list-item {
   display: flex;
   align-items: center;
   padding: 12px 16px;
@@ -132,15 +98,7 @@ $transitionTime: 0.3s;
   font-size: 14px;
   transition: all $transitionTime;
   /* 鼠标悬浮时：显示按钮 + 加阴影 */
-  &:hover {
-    background-color: rgba(128, 128, 128, 0.2);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 
-    .action-buttons {
-      opacity: 1;
-      visibility: visible; /* 鼠标悬浮时显示 */
-    }
-  }
 
   /* 公共样式：每个项横向排，垂直居中 */
   > div {
@@ -160,12 +118,12 @@ $transitionTime: 0.3s;
 
   /* 封面固定大小 */
   .coverImg {
+    width: 50px;
     flex: 0 0 auto;
     margin: 0 12px;
   }
 
   .coverImg img {
-    width: 50px;
     height: 50px;
     border-radius: 6px;
     object-fit: cover;
@@ -226,5 +184,8 @@ $transitionTime: 0.3s;
   }
 }
 
+.list-header {
+  border-radius: 0;
+}
 
 </style>
