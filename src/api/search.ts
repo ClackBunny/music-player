@@ -1,5 +1,6 @@
 import request from "@/utils/request.ts";
 import type { SongItem } from "@/type/type.ts";
+import type { SongListItem } from "@/type/searchType.ts";
 
 export enum SearchType {
     SINGLE_SONG = 1,
@@ -8,14 +9,21 @@ export enum SearchType {
     SONG_LIST = 1000,
 }
 
-export type SearchResultData = {
+export type SingleSongResultData = {
     songs: SongItem[];
     hasMore: boolean;
     songCount: number;
 }
 
+// 歌单搜索结果类型
+export type SongListResultData = {
+    playlists: SongListItem[];
+    hasMore: boolean;
+    playlistCount: number;
+}
+// 搜索接口类型
 export type SearchApiResponse = {
-    result: SearchResultData;
+    result: SingleSongResultData | SongListResultData;
     code: number;
 }
 
@@ -32,11 +40,13 @@ export type SongUrlApiResponse = {
     }[]
 }
 
-export function search(keyword: string, type: SearchType = SearchType.SINGLE_SONG,) {
+export function search(keyword: string, type: SearchType = SearchType.SINGLE_SONG, offset: number = 0, limit: number = 30): Promise<SearchApiResponse> {
     return request.get<SearchApiResponse>('/search', {
         params: {
             keywords: keyword,
-            type: type.valueOf()
+            type: type.valueOf(),
+            offset,
+            limit,
         },
     })
 }

@@ -10,7 +10,7 @@
               {{ keyword }}
             </div>
             <div class="subTitle">
-              的相关搜索如下,找到{{ totalCount }}{{activeTab().desc}}
+              的相关搜索如下,找到{{ totalCount }}{{ activeTab().desc }}
             </div>
           </div>
         </template>
@@ -58,7 +58,7 @@ const activeTab = () => {
 }
 
 // 首次加载（处理直接访问带参数URL的情况）
-function clickItem(item) {
+function clickItem(item: any) {
   router.push({
     path: '/search',
     query: {

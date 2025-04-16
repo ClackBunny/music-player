@@ -1,41 +1,43 @@
 <template>
   <div class="list-container">
-    <!--     循环设置-->
+    <!-- 列表头 -->
+    <div class="list-header">
+      <div class="songTitle">歌曲标题</div>
+      <div class="action-buttons"></div>
+      <div class="songArtist">歌手</div>
+      <div class="album">专辑</div>
+      <div class="songDuration">时长</div>
+    </div>
+
+    <!-- 列表项 -->
     <div
-        v-for="(song,index) in singleSongList"
+        v-for="(song) in singleSongList"
         :key="song.id"
         class="list-item"
-        @mouseenter="hoveredItem = song.id"
-        @mouseleave="hoveredItem = -1"
     >
-      <div class="item-content">
-        <div class="songTitle">
-          {{ getSongTitle(song) }}
-        </div>
-        <div class="songArtist">
-          {{ getSongArtist(song) }}
-        </div>
-        <div class="album">
-          {{ song.album.name }}
-        </div>
-        <div class="songDuration"
-             v-show="hoveredItem !== song.id">
-          {{ secondsToMinutes(song.duration / 1000) }}
-        </div>
+      <div class="songTitle">
+        {{ getSongTitle(song) }}
       </div>
-
-      <!-- Hover Overlay -->
-      <div
-          class="hover-overlay"
-          v-show="hoveredItem === song.id">
-
+      <div class="action-buttons">
         <span class="iconfont kongxin-play"
-              @click="()=>{const indexInList= addToPlayListWithoutPic(song); handlePlay(indexInList)}"
+              @click="() => { const indexInList = addToPlayListWithoutPic(song); handlePlay(indexInList) }"
               title="添加并播放"/>
         <span class="iconfont kongxin-category-add" @click="addToPlayList(song)" title="添加进列表"/>
         <span class="iconfont kongxin-follow" @click="handleFollow(song.id)" title="喜欢"/>
       </div>
+      <div class="songArtist">
+        {{ getSongArtist(song) }}
+      </div>
+
+      <div class="album">
+        {{ song.album.name }}
+      </div>
+      <div class="songDuration">
+        {{ secondsToMinutes(song.duration / 1000) }}
+      </div>
+
     </div>
+
     <a-pagination hideOnSinglePage
                   show-quick-jumper
                   v-model:current="currentPage"
@@ -58,17 +60,14 @@ const emit = defineEmits(['send-count']);
 
 const singleSongList = ref<SongItem[]>([])
 const totalCount = ref(0)
-const hoveredItem = ref(-1)
 const currentPage = ref(0)
 const pageSize = ref(10)
 
 console.log("单曲", keyword, type, totalCount);
-
 // 初始就获取数据并加载, 把count返回给父组件
 const loadData = async (keyword: string) => {
   console.log("loadData", keyword);
   let res = await search(keyword, SearchType.SINGLE_SONG) as SearchApiResponse;
-  // 直接断言 result 为 SingleSongResultData 类型
   const result = res.result as SingleSongResultData;
   totalCount.value = result.songCount;
   singleSongList.value = result.songs;
@@ -96,103 +95,111 @@ watch(totalCount, () => {
 
 <style scoped lang="scss">
 $transitionTime: 0.3s;
+
 .list-container {
   display: flex;
   flex-direction: column;
   gap: 1px;
-  padding: min(10px, 1vh) min(10px, 1vw);
-  overflow: scroll;
 }
+
 
 .list-item {
   height: 60px;
   position: relative;
-  //background-color: #f5f5f5;
-  padding: 5px 10px;
+  padding: 12px 16px;
   border-radius: 8px;
+  color: gray;
+  border-bottom: 1px solid #eee;
   transition: all $transitionTime;
-  overflow: hidden;
-}
-
-.list-item:hover {
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-}
-
-.item-content {
-  display: grid;
-  grid-template-columns:  3fr 2fr 1fr;
-  grid-template-rows:1fr 1fr;
-  grid-template-areas:'songTitle album songDuration' 'songArtist album songDuration';
-  grid-auto-flow: row;
-  justify-items: start;
+  display: flex;
+  justify-content: space-between;
   align-items: center;
-  z-index: 1;
+
+  &:hover {
+    background-color: rgba(128, 128, 128, 0.2);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+
+    .action-buttons {
+      opacity: 1;
+      visibility: visible;
+    }
+  }
 
   .songTitle {
+    flex: 3;
     color: #222f;
     font-weight: bold;
-    grid-area: songTitle;
   }
 
   .songArtist {
-    color: gray;
-    grid-area: songArtist;
+    flex: 2;
   }
 
   .album {
-    grid-area: album;
+    flex: 1;
   }
 
   .songDuration {
-    width: 100%;
+    flex: 1;
     display: flex;
-    grid-area: songDuration;
-    justify-content: end;
-    justify-items: end;
-  }
-}
-
-.hover-overlay {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0);
-  display: flex;
-  justify-content: end;
-  align-items: center;
-  padding: 10px;
-  gap: 12px;
-  z-index: 2;
-  transition: all $transitionTime;
-
-  &:hover {
-    background-color: rgba(128, 128, 128, 0.2); /* 半透明灰色 */
+    justify-content: flex-end;
   }
 
-  button {
-    padding: 6px 12px;
-    background-color: white;
-    border: 1px solid #ccc;
-    border-radius: 4px;
+  .action-buttons {
+    flex: 1;
+    display: flex;
+    gap: 10px;
+    top: 50%;
+    opacity: 0;
+    transition: opacity $transitionTime ease, visibility $transitionTime;
+    visibility: hidden;
+  }
+
+  .iconfont {
     cursor: pointer;
+    transition: transform 0.4s;
+    font-size: 24px;
+  }
 
-    &:hover {
-      background-color: #eee;
-    }
+  .iconfont:hover {
+    opacity: 1;
+    transform: scale(1.1);
+    color: #222;
   }
 }
 
-.iconfont {
-  cursor: pointer;
-  transition: all 0.2s ease;
-  font-size: 24px;
-}
+.list-header {
+  height: 60px;
+  position: sticky;
+  background-color: white;
+  top: 0;
+  z-index: 10;
+  padding: 12px 16px;
+  border-bottom: 2px solid #ddd;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 
-/* 鼠标悬停时变大、颜色加深 */
-.iconfont:hover {
-  transform: scale(1.1); /* 略微放大 */
-  color: #222;
+  .songTitle {
+    flex: 3;
+  }
+
+  .songArtist {
+    flex: 2;
+  }
+
+  .album {
+    flex: 1;
+  }
+
+  .songDuration {
+    flex: 1;
+    display: flex;
+    justify-content: flex-end;
+  }
+
+  .action-buttons {
+    flex: 1;
+  }
 }
 </style>

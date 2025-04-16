@@ -15,7 +15,7 @@
         @mouseenter="hoveredItem = index"
         @mouseleave="hoveredItem = -1"
     >
-      <div class="item-content">
+      <div class="list-item">
         <div class="songImg">
           <AlbumImg class="cover" :album-id="song.album.id" :pic-url="song.album.picUrl"
                     default-img="@/assets/img/default-cover.png"/>
@@ -83,7 +83,7 @@ $transitionTime: 0.3s;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
-.item-content {
+.list-item {
   display: grid;
   grid-template-columns:  50px 3fr 1fr;
   grid-template-rows:1fr 1fr;
