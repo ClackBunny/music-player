@@ -2,11 +2,11 @@
   <div class="list-container">
     <!--     循环设置-->
     <div
-        v-for="(song,index) in songList"
+        v-for="(song,index) in singleSongList"
         :key="song.id"
         class="list-item"
         @mouseenter="hoveredItem = song.id"
-        @mouseleave="hoveredItem = null"
+        @mouseleave="hoveredItem = -1"
     >
       <div class="item-content">
         <div class="songTitle">
@@ -46,19 +46,19 @@
 </template>
 
 <script setup lang="ts">
-import { search, type SearchApiResponse, SearchType } from "@/api/search.ts";
+import { search, type SearchApiResponse, SearchType, type SingleSongResultData } from "@/api/search.ts";
 import { onMounted, ref, toRefs, watch } from "vue";
 import { getSongArtist, getSongTitle, type SongItem } from "@/type/type.ts";
 import { secondsToMinutes } from "@/utils/utils.ts";
 import { addToPlayList, addToPlayListWithoutPic, handleFollow, handlePlay } from "@/utils/playControl.ts";
 
-const props = defineProps(['keyword', 'type']);
+const props = defineProps<{ 'keyword': string, 'type': string }>();
 const {keyword, type} = toRefs(props);
 const emit = defineEmits(['send-count']);
 
-const songList = ref<SongItem[]>([])
+const singleSongList = ref<SongItem[]>([])
 const totalCount = ref(0)
-const hoveredItem = ref(null)
+const hoveredItem = ref(-1)
 const currentPage = ref(0)
 const pageSize = ref(10)
 
@@ -68,8 +68,10 @@ console.log("单曲", keyword, type, totalCount);
 const loadData = async (keyword: string) => {
   console.log("loadData", keyword);
   let res = await search(keyword, SearchType.SINGLE_SONG) as SearchApiResponse;
-  totalCount.value = res.result.songCount;
-  songList.value = res.result.songs;
+  // 直接断言 result 为 SingleSongResultData 类型
+  const result = res.result as SingleSongResultData;
+  totalCount.value = result.songCount;
+  singleSongList.value = result.songs;
   emit("send-count", totalCount.value);
 }
 
@@ -79,11 +81,11 @@ function onChangePage(page: number) {
 
 onMounted(
     () => {
-      loadData(keyword.value)
+      loadData(keyword.value || '')
     }
 )
 
-watch(keyword, loadData)
+watch(() => keyword.value, loadData)
 watch(type, () => {
   loadData(keyword.value)
 })

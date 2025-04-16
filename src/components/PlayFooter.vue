@@ -72,7 +72,7 @@
           @after-open-change="(bool: boolean)=>{console.log('open', bool);}"
       >
         <template #extra>
-          <a-button style="margin-right: 8px" @click="console.log('清空列表')">清空列表</a-button>
+          <a-button style="margin-right: 8px" @click="clearPlayList()">清空列表</a-button>
         </template>
         <PlayList/>
       </a-drawer>
@@ -103,7 +103,7 @@ import { usePlayStateStore } from "@/stores/playState.ts";
 import { storeToRefs } from "pinia";
 import { secondsToMinutes } from "@/utils/utils.ts";
 import AlbumImg from "@/components/AlbumImg.vue";
-import { handlePlay, nextSong, previousSong } from "@/utils/playControl.ts";
+import { clearPlayList, handlePlay, nextSong, previousSong } from "@/utils/playControl.ts";
 import { message } from "ant-design-vue";
 
 const song = ref({
@@ -132,7 +132,7 @@ function togglePlay() {
     message.warning("播放列表为空")
     return
   }
-  if (!playState.value.musicUrl){
+  if (!playState.value.musicUrl) {
     handlePlay(0)
     return
   }

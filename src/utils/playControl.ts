@@ -1,4 +1,4 @@
-import { message } from "ant-design-vue";
+import { message, Modal } from "ant-design-vue";
 import { usePlayStateStore } from "@/stores/playState.ts";
 import { storeToRefs } from "pinia";
 import { checkMusic, songUrl } from "@/api/search.ts";
@@ -112,6 +112,59 @@ export function previousSong() {
     }
     handlePlay(playState.value.index);
 }
+
+/**
+ * 删除歌曲（带确认弹窗）
+ */
+export function handleDelete(index: number) {
+    const song = playList.value[index];
+    Modal.confirm({
+        title: "删除歌曲",
+        content: `确定要从播放列表中删除《${song.name}》吗？`,
+        okText: "删除",
+        cancelText: "取消",
+        async onOk() {
+            const wasPlaying = playState.value.index === index;
+            playList.value.splice(index, 1);
+
+            if (playList.value.length === 0) {
+                playState.value.index = -1;
+                playState.value.musicUrl = '';
+                return;
+            }
+
+            // 调整播放索引
+            if (wasPlaying) {
+                if (index >= playList.value.length) {
+                    playState.value.index = 0;
+                }
+                await handlePlay(playState.value.index);
+            } else if (index < playState.value.index) {
+                playState.value.index--; // 保持当前播放位置正确
+            }
+        }
+    });
+}
+
+/**
+ * 清空播放列表（带确认）
+ */
+export function clearPlayList() {
+    Modal.confirm({
+        title: "清空播放列表",
+        content: "确定要清空播放列表吗？这将停止当前播放。",
+        okText: "清空",
+        cancelText: "取消",
+        onOk() {
+            playList.value = [];
+            playState.value.index = -1;
+            playState.value.musicUrl = '';
+            message.success("播放列表已清空");
+        }
+    });
+}
+
+// ==================== 内部方法 ====================
 
 async function check(songId: number): Promise<boolean> {
     const res = await checkMusic(songId)

@@ -1,3 +1,9 @@
+<!--
+ * 播放列表
+ * @Author: kongxin
+ * @Date: 2025/16/16 16:43:19
+ * @LastEditors: kongxin
+ -->
 <template>
   <div class="list-container">
     <!--     循环设置-->
@@ -5,8 +11,9 @@
         v-for="(song,index) in playList"
         :key="song.id"
         class="list-item"
-        @mouseenter="hoveredItem = song.id"
-        @mouseleave="hoveredItem = 0"
+        :class="{ 'playing': index === playState.index }"
+        @mouseenter="hoveredItem = index"
+        @mouseleave="hoveredItem = -1"
     >
       <div class="item-content">
         <div class="songImg">
@@ -21,7 +28,7 @@
           {{ getSongArtist(song) }}
         </div>
         <div class="songDuration"
-             v-show="hoveredItem !== song.id">
+             v-show="hoveredItem !== index">
           {{ secondsToMinutes(song.duration / 1000) }}
         </div>
       </div>
@@ -29,11 +36,11 @@
       <!-- Hover Overlay -->
       <div
           class="hover-overlay"
-          v-show="hoveredItem === song.id">
+          v-show="hoveredItem === index">
 
         <span class="iconfont kongxin-play" @click="handlePlay(index)" title="播放"/>
         <span class="iconfont kongxin-follow" @click="handleFollow(song.id)" title="喜欢"/>
-        <span class="iconfont kongxin-delete" @click="handleDelete(song)" title="删除"/>
+        <span class="iconfont kongxin-delete" @click="handleDelete(index)" title="删除"/>
       </div>
     </div>
   </div>
@@ -42,20 +49,15 @@
 import { usePlayStateStore } from "@/stores/playState.ts";
 import { storeToRefs } from "pinia";
 import { ref } from "vue";
-import { getSongArtist, getSongTitle, type SongItem } from "@/type/type.ts";
+import { getSongArtist, getSongTitle } from "@/type/type.ts";
 import { secondsToMinutes } from "../utils/utils.ts";
-import { handleFollow, handlePlay } from "@/utils/playControl.ts";
+import { handleDelete, handleFollow, handlePlay } from "@/utils/playControl.ts";
 import AlbumImg from "@/components/AlbumImg.vue";
 
+
 const store = usePlayStateStore();
-const {playList} = storeToRefs(store);
-const hoveredItem = ref<number>(0)
-
-// 从播放列表中删除
-const handleDelete = (item: SongItem) => {
-  playList.value.splice(playList.value.indexOf(item), 1)
-}
-
+const {playState, playList} = storeToRefs(store);
+const hoveredItem = ref<number>(-1)
 </script>
 <style lang="scss" scoped>
 $transitionTime: 0.3s;
@@ -172,4 +174,20 @@ $transitionTime: 0.3s;
   color: #222;
 }
 
+/**
+  播放列表的高亮显示
+ */
+.playing {
+  background-color: rgba(252, 61, 73, 0.08); // 类似 Spotify 的绿色调
+
+  .songTitle {
+    color: #fc3d49;
+  }
+
+  .cover {
+    box-shadow: 0 0 4px #fc3d49;
+    transform: scale(1.03);
+    transition: all 0.2s ease;
+  }
+}
 </style>
