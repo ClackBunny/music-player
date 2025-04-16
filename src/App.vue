@@ -22,7 +22,7 @@
             </a-layout>
           </a-layout>
         </a-layout-content>
-        <a-layout-footer style="margin: 1px 1px; padding: 0px;height:15vh;max-height: 100px">
+        <a-layout-footer style="margin: 1px 1px; padding: 0;height:15vh;max-height: 100px">
           <PlayFooter/>
         </a-layout-footer>
       </a-layout>
@@ -33,7 +33,6 @@
 <script setup lang="ts">
 import PlayFooter from "@/components/PlayFooter.vue";
 import Menu from "@/components/Menu.vue";
-import { ref } from "vue";
 import SearchHeader from "@/components/SearchHeader.vue";
 import { usePlayStateStore } from "@/stores/playState.ts";
 import { storeToRefs } from "pinia";

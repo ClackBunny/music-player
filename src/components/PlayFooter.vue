@@ -47,7 +47,7 @@
       <a-popover trigger="hover">
         <template #content>
           <div style="display: inline-block; height: 100px;">
-            <a-slider v-model:value="playState.volume" :max="100" :min="0" vertical/>
+            <a-slider v-model:value="playState.volume" :max="100" :min="0" vertical="true"/>
           </div>
         </template>
         <a-button
@@ -190,10 +190,10 @@ watch(
     }
 );
 
-// 监听播放地址, 变化了就需要切歌
+// 监听播放地址, 变化了就需要切歌,也需要切换图片和标题
 watch(
     () => playState.value.musicUrl,
-    (newVal, oldValue) => {
+    (newVal) => {
       console.log(newVal)
       audio.value.pause();
       audio.value.src = newVal;

@@ -2,7 +2,7 @@
   <div class="container">
     <div v-if="hasKeywords" class="content-wrapper">
       <a-page-header
-          style="border: 0px solid rgb(235, 237, 240); width: 100%;"
+          style="border: 0 solid rgb(235, 237, 240); width: 100%;"
       >
         <template #title>
           <div class="title">
