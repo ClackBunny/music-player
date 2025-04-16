@@ -3,7 +3,8 @@ import axios from 'axios';
 import { showMessage } from './status' // 接口请求失败的状态码
 import { message } from 'ant-design-vue'
 import { useSeverLoadingStore } from '@/stores/serverLoading.ts'
-import pinia from "@/stores"; // 引入定义的store
+import pinia from "@/stores";
+
 const store = useSeverLoadingStore(pinia) // 调用方法,控制加载动画的开启关闭
 
 // 创建axios实例
@@ -14,8 +15,9 @@ const request = axios.create({
 });
 
 declare module "axios" {
-    interface AxiosInstance<T = any> {
+    interface AxiosInstance {
         (config: AxiosRequestConfig): Promise<any>
+
         // 这里追加你的参数
     }
 }
@@ -33,6 +35,23 @@ request.interceptors.request.use(
         // 在此处添加请求头等，如添加 token
         const token = localStorage.getItem("token");
         config.headers["Authorization"] = token ? "Bearer " + localStorage.getItem("token") : '';
+        // 如果是 GET 请求，添加 timestamp 参数
+        if (config.method?.toLowerCase() === 'get') {
+            if (!config.params) {
+                config.params = {};
+            }
+            // config.params.timestamp = Date.now(); // 当前时间戳（单位：毫秒）
+        }
+        // ✅ 拼接并打印最终 URL（仅开发环境可打印）
+        if (import.meta.env.VITE_ENV === 'development') {
+            const url = new URL(config.baseURL + (config.url ?? ''), window.location.origin);
+
+            // 将 params 拼成 query string
+            const params = new URLSearchParams(config.params || {}).toString();
+            const fullUrl = `${url.pathname}${params ? '?' + params : ''}`;
+
+            console.log(`[GET ${fullUrl}]`);
+        }
         return config;
     },
     (error: any) => {

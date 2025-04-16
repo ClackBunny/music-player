@@ -10,14 +10,14 @@
               {{ keyword }}
             </div>
             <div class="subTitle">
-              x this is sub title
+              的相关搜索如下,找到{{ totalCount }}{{activeTab().desc}}
             </div>
           </div>
         </template>
       </a-page-header>
       <a-menu v-model:selectedKeys="current" mode="horizontal" :items="menuItems" @click="clickItem"/>
       <div class="tab-content">
-          <component :is="activeComponent" :keyword="keyword" :type="current[0]"/>
+        <component :is="activeTab().component" :keyword="keyword" :type="current[0]" @send-count="totalCount=$event"/>
       </div>
     </div>
     <div v-else>
@@ -27,41 +27,35 @@
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted, ref, watch } from "vue";
+import { onMounted, ref, watch } from "vue";
 import { useSearchStore } from "@/stores/search.ts";
 import { storeToRefs } from "pinia";
 import { useRoute, useRouter } from "vue-router";
 import { queryToString } from "@/utils/utils.ts";
-import { search, SearchType } from "@/api/search.ts";
 import SingleSong from "@/components/SingleSong.vue";
 import Album from "@/components/Album.vue";
 import Singer from "@/components/Singer.vue";
 import SongList from "@/components/SongList.vue";
 
-const loadData = async (keyword: string, type: SearchType) => {
-  let res = await search(keyword, type);
-  console.log(res);
-}
-
 const current = ref<string[]>(['']);
 const route = useRoute();
 const router = useRouter();
 const searchStore = useSearchStore();
-let {routeMap, typeMap} = searchStore;
+let {typeMap} = searchStore;
 let {keyword, hasKeywords, menuItems} = storeToRefs(searchStore);
-const {getRoute} = searchStore;
+const totalCount = ref(0);
 
 // 选项卡配置
 const tabs = [
-  {name: 'singleSong', label: '按钮1', component: SingleSong},
-  {name: 'album', label: '按钮2', component: Album},
-  {name: 'singer', label: '按钮3', component: Singer},
-  {name: 'songList', label: '按钮4', component: SongList}
+  {name: 'singleSong', desc: '首单曲', component: SingleSong},
+  {name: 'songList', desc: '个歌单', component: SongList},
+  {name: 'singer', desc: '个歌手', component: Singer},
+  {name: 'album', desc: '个专辑', component: Album}
 ]
 // 计算当前显示的组件
-const activeComponent = computed(() => {
-  return tabs.find(tab => tab.name === current.value[0])?.component
-})
+const activeTab = () => {
+  return tabs.find(tab => tab.name === current.value[0]) ?? tabs[0]
+}
 
 // 首次加载（处理直接访问带参数URL的情况）
 function clickItem(item) {
@@ -111,7 +105,9 @@ watch(
   height: 100%;
   flex-direction: column;
   min-width: 300px;
+  min-height: 0;
 }
+
 .content-wrapper {
   flex: 1;
   display: flex;

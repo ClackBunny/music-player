@@ -24,16 +24,13 @@ const value = ref<string>('');
 const router = useRouter();
 const onSearch = function (searchValue: string) {
   searchValue = searchValue.trim();
-  // let res = search(searchValue, 1);
-  // console.log(res);
   router.push({
-   path: `/search`,
-   query: {
-     keyword: searchValue,
-   }
+    path: `/search`,
+    query: {
+      keyword: searchValue,
+      type: "singleSong"
+    }
   });
-  console.log('use value', searchValue);
-  console.log('or use this.value', value.value);
 };
 
 </script>

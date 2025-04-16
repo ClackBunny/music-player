@@ -37,3 +37,13 @@ export function queryToNumber(
     // 处理字符串类型和 null/undefined
     return value != null ? Number(value) : defaultValue;
 }
+
+/**
+ * 将秒变成01:00的形式
+ * @param seconds 秒数
+ */
+export function secondsToMinutes(seconds: number) {
+    const m = Math.floor(seconds / 60)
+    const s = Math.floor(seconds % 60)
+    return `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`
+}

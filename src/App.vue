@@ -7,18 +7,6 @@
     }"
   >
     <div class="common-layout">
-      <!--      <a-layout style="min-height: 100vh">-->
-      <!--          <a-layout-header style="background: #fff; padding: 0;">-->
-      <!--            <search-header/>-->
-      <!--          </a-layout-header>-->
-      <!--          <a-layout-content style="background: #fff; padding: 0;margin: 0 1px;">-->
-      <!--            <Menu/>-->
-      <!--            <router-view></router-view>-->
-      <!--          </a-layout-content>-->
-      <!--          <a-layout-footer style="padding: 0;height:15vh;max-height: 100px">-->
-      <!--            <PlayFooter/>-->
-      <!--          </a-layout-footer>-->
-      <!--        </a-layout>-->
       <a-layout style="height: 100%;min-width: 700px;min-height: 500px;">
         <a-layout-content style="height: 100%;">
           <a-layout style="height: 100%;">
@@ -47,13 +35,19 @@ import PlayFooter from "@/components/PlayFooter.vue";
 import Menu from "@/components/Menu.vue";
 import { ref } from "vue";
 import SearchHeader from "@/components/SearchHeader.vue";
+import { usePlayStateStore } from "@/stores/playState.ts";
+import { storeToRefs } from "pinia";
 
-const selectedKeys = ref<string[]>(['1']);
+const store =usePlayStateStore()
+const {isPlayListOpen} = storeToRefs(store)
 
-let collapsed = ref<boolean>(false);
 </script>
 
 <style lang="scss" scoped>
+#playListDraw {
+  position: relative;
+  left: -50vw;
+}
 .common-layout {
   position: absolute;
   top: 0;
@@ -71,11 +65,11 @@ let collapsed = ref<boolean>(false);
 }
 
 
-html, body {
-  width: 100%;
-  height: 100%;
-  min-height: 100%;
-  min-width: 100%;
-}
+//html, body {
+//  width: 100%;
+//  height: 100%;
+//  min-height: 100%;
+//  min-width: 100%;
+//}
 
 </style>

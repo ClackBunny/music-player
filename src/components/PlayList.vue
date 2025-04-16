@@ -2,21 +2,23 @@
   <div class="list-container">
     <!--     循环设置-->
     <div
-        v-for="(song,index) in songList"
+        v-for="(song,index) in playList"
         :key="song.id"
         class="list-item"
         @mouseenter="hoveredItem = song.id"
-        @mouseleave="hoveredItem = null"
+        @mouseleave="hoveredItem = 0"
     >
       <div class="item-content">
+        <div class="songImg">
+          <AlbumImg class="cover" :album-id="song.album.id" :pic-url="song.album.picUrl"
+                    default-img="@/assets/img/default-cover.png"/>
+          <!--                    <img src="@/assets/img/default-cover.png" alt="albumCover" class="cover"/>-->
+        </div>
         <div class="songTitle">
           {{ getSongTitle(song) }}
         </div>
         <div class="songArtist">
           {{ getSongArtist(song) }}
-        </div>
-        <div class="album">
-          {{ song.album.name }}
         </div>
         <div class="songDuration"
              v-show="hoveredItem !== song.id">
@@ -29,70 +31,33 @@
           class="hover-overlay"
           v-show="hoveredItem === song.id">
 
-        <span class="iconfont kongxin-play"
-              @click="()=>{const indexInList= addToPlayListWithoutPic(song); handlePlay(indexInList)}"
-              title="添加并播放"/>
-        <span class="iconfont kongxin-category-add" @click="addToPlayList(song)" title="添加进列表"/>
+        <span class="iconfont kongxin-play" @click="handlePlay(index)" title="播放"/>
         <span class="iconfont kongxin-follow" @click="handleFollow(song.id)" title="喜欢"/>
+        <span class="iconfont kongxin-delete" @click="handleDelete(song)" title="删除"/>
       </div>
     </div>
-    <a-pagination hideOnSinglePage
-                  show-quick-jumper
-                  v-model:current="currentPage"
-                  v-model:pageSize="pageSize"
-                  :total="totalCount"
-                  @change="onChangePage"/>
   </div>
 </template>
-
-<script setup lang="ts">
-import { search, type SearchApiResponse, SearchType } from "@/api/search.ts";
-import { onMounted, ref, toRefs, watch } from "vue";
+<script lang="ts" setup>
+import { usePlayStateStore } from "@/stores/playState.ts";
+import { storeToRefs } from "pinia";
+import { ref } from "vue";
 import { getSongArtist, getSongTitle, type SongItem } from "@/type/type.ts";
-import { secondsToMinutes } from "@/utils/utils.ts";
-import { addToPlayList, addToPlayListWithoutPic, handleFollow, handlePlay } from "@/utils/playControl.ts";
+import { secondsToMinutes } from "../utils/utils.ts";
+import { handleFollow, handlePlay } from "@/utils/playControl.ts";
+import AlbumImg from "@/components/AlbumImg.vue";
 
-const props = defineProps(['keyword', 'type']);
-const {keyword, type} = toRefs(props);
-const emit = defineEmits(['send-count']);
+const store = usePlayStateStore();
+const {playList} = storeToRefs(store);
+const hoveredItem = ref<number>(0)
 
-const songList = ref<SongItem[]>([])
-const totalCount = ref(0)
-const hoveredItem = ref(null)
-const currentPage = ref(0)
-const pageSize = ref(10)
-
-console.log("单曲", keyword, type, totalCount);
-
-// 初始就获取数据并加载, 把count返回给父组件
-const loadData = async (keyword: string) => {
-  console.log("loadData", keyword);
-  let res = await search(keyword, SearchType.SINGLE_SONG) as SearchApiResponse;
-  totalCount.value = res.result.songCount;
-  songList.value = res.result.songs;
-  emit("send-count", totalCount.value);
+// 从播放列表中删除
+const handleDelete = (item: SongItem) => {
+  playList.value.splice(playList.value.indexOf(item), 1)
 }
 
-function onChangePage(page: number) {
-  console.log(page);
-}
-
-onMounted(
-    () => {
-      loadData(keyword.value)
-    }
-)
-
-watch(keyword, loadData)
-watch(type, () => {
-  loadData(keyword.value)
-})
-watch(totalCount, () => {
-  emit("send-count", totalCount.value)
-})
 </script>
-
-<style scoped lang="scss">
+<style lang="scss" scoped>
 $transitionTime: 0.3s;
 .list-container {
   display: flex;
@@ -118,13 +83,30 @@ $transitionTime: 0.3s;
 
 .item-content {
   display: grid;
-  grid-template-columns:  3fr 2fr 1fr;
+  grid-template-columns:  50px 3fr 1fr;
   grid-template-rows:1fr 1fr;
-  grid-template-areas:'songTitle album songDuration' 'songArtist album songDuration';
+  grid-template-areas:'songImg songTitle songDuration' 'songImg songArtist songDuration';
   grid-auto-flow: row;
   justify-items: start;
   align-items: center;
   z-index: 1;
+
+  .songImg {
+    grid-area: songImg;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 5px;
+
+    .cover {
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: cover;
+      border-radius: 3px;
+    }
+  }
 
   .songTitle {
     color: #222f;
@@ -135,10 +117,6 @@ $transitionTime: 0.3s;
   .songArtist {
     color: gray;
     grid-area: songArtist;
-  }
-
-  .album {
-    grid-area: album;
   }
 
   .songDuration {
@@ -193,4 +171,5 @@ $transitionTime: 0.3s;
   transform: scale(1.1); /* 略微放大 */
   color: #222;
 }
+
 </style>
