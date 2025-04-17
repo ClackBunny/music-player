@@ -1,24 +1,35 @@
 <template>
-  这是专辑{{keyword}}-{{type}}
+  这是专辑{{ keyword }}-{{ type }}
   <div>
-    {{results}}
+    {{ albumList }}
   </div>
 </template>
 
 <script setup lang="ts">
-import { search, SearchType } from "@/api/search.ts";
-import { onMounted, ref } from "vue";
+import { search } from "@/api/search.ts";
+import { onMounted, ref, toRefs } from "vue";
+import { type AlbumResultData, SearchType } from "@/type/searchType.ts";
+import type { Album } from "@/type/type.ts";
 
-const {keyword, type} = defineProps(['keyword', 'type']);
+// 定义组件入参props和自定义事件(send-count)
+const props = defineProps<{ 'keyword': string, 'type': string }>();
+const {keyword, type} = toRefs(props);
+const emit = defineEmits(['send-count']);
+
+const albumList = ref<Album[]>([])
+const totalCount = ref(0)
+
 console.log("专辑", keyword, type);
-const results = ref([])
+
 const loadData = async (keyword: string) => {
-  let res = await search(keyword, SearchType.SINGLE_SONG);
-  results.value = res['result'] || []
+  let res = (await search(keyword, SearchType.ALBUM)).result as AlbumResultData;
+  albumList.value = res.albums;
+  totalCount.value = res.albumCount;
+  emit("send-count", totalCount.value);
 }
 onMounted(
     () => {
-      loadData(keyword)
+      loadData(keyword.value)
     }
 )
 </script>

@@ -49,8 +49,8 @@
 
 <script setup lang="ts">
 import { onMounted, ref, toRefs } from "vue";
-import { search, SearchType, type SongListResultData } from "@/api/search.ts";
-import type { SongListItem } from "@/type/searchType.ts";
+import { search } from "@/api/search.ts";
+import { SearchType, type SongListItem, type SongListResultData } from "@/type/searchType.ts";
 
 const props = defineProps<{ 'keyword': string, 'type': string }>();
 const {keyword, type} = toRefs(props);

@@ -1,3 +1,47 @@
+/**
+ * 这里是搜索组件相关的类型
+ */
+import type { Album, Artist, Creator, SongItem, Track } from "@/type/type.ts";
+
+export enum SearchType {
+    SINGLE_SONG = 1,
+    ALBUM = 10,
+    SINGER = 100,
+    SONG_LIST = 1000,
+}
+
+export type SingleSongResultData = {
+    songs: SongItem[];
+    hasMore: boolean;
+    songCount: number;
+}
+
+// 歌单搜索结果类型
+export type SongListResultData = {
+    playlists: SongListItem[];
+    hasMore: boolean;
+    playlistCount: number;
+}
+
+export interface AlbumResultData {
+    albums: Album[];
+    albumCount: number;
+    hlWords: string[];
+}
+
+export interface SingerResultData {
+    artists: Artist[];
+    artistCount: number;
+    hlWords: string[];
+    hasMore: boolean;
+}
+
+// 搜索接口类型
+export type SearchApiResponse = {
+    result: SingleSongResultData | SongListResultData | AlbumResultData | SingerResultData;
+    code: number;
+}
+
 export interface SongListItem {
     id: number;
     name: string;
@@ -20,104 +64,8 @@ export interface SongListItem {
     alg: string;
 }
 
-export interface Creator {
-    nickname: string;
-    userId: number;
-    userType: number;
-    avatarUrl: string;
-    authStatus: number;
-    expertTags: string[] | null;
-    experts: Record<string, any> | null;
-}
 
-export interface Track {
-    name: string;
-    id: number;
-    position: number;
-    alias: string[];
-    status: number;
-    fee: number;
-    copyrightId: number;
-    disc: string;
-    no: number;
-    artists: Artist[];
-    album: Album;
-    starred: boolean;
-    popularity: number;
-    score: number;
-    starredNum: number;
-    duration: number;
-    playedNum: number;
-    dayPlays: number;
-    hearTime: number;
-    ringtone: string | null;
-    crbt: string | null;
-    audition: string | null;
-    copyFrom: string;
-    commentThreadId: string;
-    rtUrl: string | null;
-    ftype: number;
-    rtUrls: string[];
-    copyright: number;
-    hMusic: MusicQuality;
-    mMusic: MusicQuality;
-    lMusic: MusicQuality;
-    bMusic: MusicQuality;
-    mvid: number;
-    rtype: number;
-    rurl: string | null;
-    mp3Url: string | null;
-}
 
-export interface Artist {
-    name: string;
-    id: number;
-    picId: number;
-    img1v1Id: number;
-    briefDesc: string;
-    picUrl: string;
-    img1v1Url: string;
-    albumSize: number;
-    alias: string[];
-    trans: string;
-    musicSize: number;
-    topicPerson: number;
-}
 
-export interface Album {
-    name: string;
-    id: number;
-    idStr: string | null;
-    type: string;
-    size: number;
-    picId: number;
-    blurPicUrl: string;
-    companyId: number;
-    pic: number;
-    picUrl: string;
-    publishTime: number;
-    description: string;
-    tags: string;
-    company: string;
-    briefDesc: string;
-    artist: Artist;
-    songs: any[];
-    alias: string[];
-    status: number;
-    copyrightId: number;
-    commentThreadId: string;
-    artists: Artist[];
-    onSale: boolean;
-}
 
-export interface MusicQuality {
-    name: string | null;
-    id: number;
-    size: number;
-    extension: string;
-    sr: number;
-    dfsId: number;
-    bitrate: number;
-    playTime: number;
-    volumeDelta: number;
-}
+

@@ -1,7 +1,7 @@
 import { message, Modal } from "ant-design-vue";
 import { usePlayStateStore } from "@/stores/playState.ts";
 import { storeToRefs } from "pinia";
-import { checkMusic, songUrl } from "@/api/search.ts";
+import { checkMusic, songUrl } from "@/api/song.ts";
 import type { SongItem } from "@/type/type.ts";
 import { getAlbumPicUrl } from "@/api/album.ts";
 

@@ -39,7 +39,7 @@ const {collapsed, menuItems, routeMap} = storeToRefs(store);
 const {trigger, getRoute} = store;
 const selectedKeys = ref<string[]>(['1']);
 
-function clickItem(item) {
+function clickItem(item: any) {
   router.push({path: getRoute(item.key), params: {item}});
 }
 </script>

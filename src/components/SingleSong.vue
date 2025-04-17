@@ -48,11 +48,12 @@
 </template>
 
 <script setup lang="ts">
-import { search, type SearchApiResponse, SearchType, type SingleSongResultData } from "@/api/search.ts";
+import { search } from "@/api/search.ts";
 import { onMounted, ref, toRefs, watch } from "vue";
 import { getSongArtist, getSongTitle, type SongItem } from "@/type/type.ts";
 import { secondsToMinutes } from "@/utils/utils.ts";
 import { addToPlayList, addToPlayListWithoutPic, handleFollow, handlePlay } from "@/utils/playControl.ts";
+import { type SearchApiResponse, SearchType, type SingleSongResultData } from "@/type/searchType.ts";
 
 const props = defineProps<{ 'keyword': string, 'type': string }>();
 const {keyword, type} = toRefs(props);

@@ -1,4 +1,6 @@
+// 这里放一些公用的类型
 export type PlayList = Array<SongItem>
+
 export type SongItem = {
     id: number;
     name: string;
@@ -11,27 +13,107 @@ export type SongItem = {
     // 0: 免费或无版权 1: VIP 歌曲 4: 购买专辑 8: 非会员可免费播放低音质，会员可播放高音质及下载
     fee?: number;
 }
-export type Album = {
-    id: number;
-    name: string;
-    artists?: Artist[];
-    artist?: Artist;
-    publishTime?: number;
-    size?: number;
-    copyrightId?: number;
-    status?: number;
-    picId?: number | string;
-    picUrl?: string;
-    info?:Object;
+
+export interface Creator {
+    nickname: string;
+    userId: number;
+    userType: number;
+    avatarUrl: string;
+    authStatus: number;
+    expertTags: string[] | null;
+    experts: Record<string, any> | null;
 }
 
-export type Artist = {
+export interface Track {
+    name: string;
+    id: number;
+    position: number;
+    alias: string[];
+    status: number;
+    fee: number;
+    copyrightId: number;
+    disc: string;
+    no: number;
+    artists: Artist[];
+    album: Album;
+    starred: boolean;
+    popularity: number;
+    score: number;
+    starredNum: number;
+    duration: number;
+    playedNum: number;
+    dayPlays: number;
+    hearTime: number;
+    ringtone: string | null;
+    crbt: string | null;
+    audition: string | null;
+    copyFrom: string;
+    commentThreadId: string;
+    rtUrl: string | null;
+    ftype: number;
+    rtUrls: string[];
+    copyright: number;
+    hMusic: MusicQuality;
+    mMusic: MusicQuality;
+    lMusic: MusicQuality;
+    bMusic: MusicQuality;
+    mvid: number;
+    rtype: number;
+    rurl: string | null;
+    mp3Url: string | null;
+}
+
+export interface Artist {
+    name: string;
+    id: number;
+    picUrl: string;
+    alias: string[];
+    picId?: number;
+    img1v1Id?: number;
+    briefDesc?: string;
+    img1v1Url?: string;
+    albumSize?: number;
+    trans?: string;
+    musicSize?: number;
+    topicPerson?: number;
+}
+
+export interface Album {
     id: number;
     name: string;
+    status: number;
+    size: number;
+    publishTime: number;
+    artist: Artist;
+    idStr?: string | null;
+    type?: string;
     picId?: number | string;
-    picUrl?: string | null;
+    blurPicUrl?: string;
+    companyId?: number;
+    pic?: number;
+    picUrl?: string;
+    description?: string;
+    tags?: string;
+    company?: string;
+    briefDesc?: string;
+    songs?: any[];
     alias?: string[];
-    img1v1Url?: string;
+    copyrightId?: number;
+    commentThreadId?: string;
+    artists?: Artist[];
+    onSale?: boolean;
+}
+
+export interface MusicQuality {
+    name: string | null;
+    id: number;
+    size: number;
+    extension: string;
+    sr: number;
+    dfsId: number;
+    bitrate: number;
+    playTime: number;
+    volumeDelta: number;
 }
 
 // 获取歌曲名字(包含别名)

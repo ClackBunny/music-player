@@ -17,7 +17,7 @@ const props = defineProps<{
   picUrl?: string;
   defaultImg?: string;
 }>()
-const currentSrc = ref<string | null>(null)
+const currentSrc = ref<string>('')
 const attemptedNew = ref(false)
 
 /**

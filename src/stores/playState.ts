@@ -32,7 +32,7 @@ export const usePlayStateStore = defineStore('playState', () => {
                 artists: [{
                     "id": 11127,
                     "name": "Beyond",
-                    "picUrl": undefined,
+                    "picUrl": '',
                     "alias": [],
                     "picId": 0,
                     "img1v1Url": "https://p2.music.126.net/6y-UleORITEDbvrOLV0Q8A==/5639395138885805.jpg",
@@ -43,7 +43,7 @@ export const usePlayStateStore = defineStore('playState', () => {
                     "artist": {
                         "id": 0,
                         "name": "",
-                        "picUrl": null,
+                        "picUrl": '',
                         "alias": [],
                         "picId": 0,
                         "img1v1Url": "https://p2.music.126.net/6y-UleORITEDbvrOLV0Q8A==/5639395138885805.jpg",
@@ -68,7 +68,7 @@ export const usePlayStateStore = defineStore('playState', () => {
                     {
                         "id": 12138269,
                         "name": "毛不易",
-                        "picUrl": null,
+                        "picUrl": '',
                         "alias": [],
                         "picId": 0,
                         "img1v1Url": "https://p1.music.126.net/6y-UleORITEDbvrOLV0Q8A==/5639395138885805.jpg",
@@ -80,7 +80,7 @@ export const usePlayStateStore = defineStore('playState', () => {
                     "artist": {
                         "id": 0,
                         "name": "",
-                        "picUrl": null,
+                        "picUrl": '',
                         "alias": [],
                         "picId": 0,
                         "img1v1Url": "https://p1.music.126.net/6y-UleORITEDbvrOLV0Q8A==/5639395138885805.jpg",
@@ -104,7 +104,7 @@ export const usePlayStateStore = defineStore('playState', () => {
                     {
                         "id": 4721,
                         "name": "朴树",
-                        "picUrl": null,
+                        "picUrl": '',
                         "alias": [],
                         "img1v1Url": "https://p1.music.126.net/6y-UleORITEDbvrOLV0Q8A==/5639395138885805.jpg",
                     }
@@ -115,13 +115,14 @@ export const usePlayStateStore = defineStore('playState', () => {
                     "artist": {
                         "id": 0,
                         "name": "",
-                        "picUrl": null,
+                        "picUrl": '',
                         "alias": [],
                         "img1v1Url": "https://p1.music.126.net/6y-UleORITEDbvrOLV0Q8A==/5639395138885805.jpg",
                     },
                     "publishTime": 1493481600007,
                     "size": 11,
                     "copyrightId": 2712526,
+                    "status": 0,
                 },
                 "duration": 302119,
                 "copyrightId": 2712526,

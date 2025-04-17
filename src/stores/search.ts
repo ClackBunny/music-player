@@ -2,7 +2,8 @@ import { computed, h, ref } from 'vue'
 import { defineStore } from 'pinia'
 import { CalendarOutlined, MailOutlined, SettingOutlined, } from '@ant-design/icons-vue'
 import { type MenuProps } from 'ant-design-vue';
-import { SearchType } from "@/api/search.ts";
+import { SearchType } from "@/type/searchType.ts";
+
 
 export const useSearchStore = defineStore('search', () => {
 
