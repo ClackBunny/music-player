@@ -20,8 +20,7 @@ export async function handlePlay(indexInList: number = 0) {
             return;
         }
     }
-    console.log(indexInList);
-    console.log(playList.value[indexInList])
+
     const songId = playList.value[indexInList].id;
     // 1. 检查歌曲是否可用
     const isAvailable = await check(songId)

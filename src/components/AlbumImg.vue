@@ -8,7 +8,7 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref } from 'vue'
+import { onMounted, ref, watch } from 'vue'
 import { getAlbumPicUrl } from "@/api/album.ts";
 
 // Props：增加 defaultImg 让调用者自定义默认图
@@ -24,7 +24,7 @@ const attemptedNew = ref(false)
  * 加载失败时尝试获取新图或使用默认图
  */
 function handleError(): void {
-  console.log("出错了", currentSrc.value,)
+  console.log("出错了, currentSrc", currentSrc.value,)
   if (!attemptedNew.value) {
     fetchNewPic()
   } else {
@@ -58,5 +58,10 @@ onMounted(() => {
     console.log('mounted')
     fetchNewPic()
   }
+})
+
+watch(() => props.albumId, () => {
+  attemptedNew.value = false
+  currentSrc.value = props.picUrl || ''
 })
 </script>

@@ -9,10 +9,11 @@
         @timeupdate="timeupdate"></audio>
     <!-- 左侧区域 -->
     <div class="left">
-      <!--      :style="{transform: `rotate(-${playState.angle}deg)`,}"-->
-      <AlbumImg :album-id="1234" :pic-url="song.cover" class="cover"/>
-      <span class="songTitle">{{ song.title }}</span>-
-      <span class="songArtist">{{ song.artist }}</span>
+      <AlbumImg :album-id="song.albumId" :pic-url="song.coverImgUrl" class="cover"
+                :style="{transform: `rotate(-${playState.angle}deg)`,}"/>
+      <span class="songTitle">{{ song.title }}</span>
+      <span class="songArtist"
+            v-show="song.artist">-{{ song.artist }}</span>
     </div>
 
     <!-- 中间区域 -->
@@ -47,7 +48,7 @@
       <a-popover trigger="hover">
         <template #content>
           <div style="display: inline-block; height: 100px;">
-            <a-slider v-model:value="playState.volume" :max="100" :min="0" vertical="true"/>
+            <a-slider v-model:value="playState.volume" :max="100" :min="0" :vertical="true"/>
           </div>
         </template>
         <a-button
@@ -105,11 +106,18 @@ import { secondsToMinutes } from "@/utils/utils.ts";
 import AlbumImg from "@/components/AlbumImg.vue";
 import { clearPlayList, handlePlay, nextSong, previousSong } from "@/utils/playControl.ts";
 import { message } from "ant-design-vue";
+import { getSongArtist } from "@/type/type.ts";
 
-const song = ref({
-  cover: '/cover-gem.jpg', // 可替换为真实封面
-  title: '给你给我',
-  artist: '毛不易',
+const song = ref<{
+  albumId: number,
+  coverImgUrl?: string,
+  title: string,
+  artist: string,
+}>({
+  albumId: -1,
+  coverImgUrl: '/cover-gem.jpg', // 可替换为真实封面
+  title: '未播放歌曲',
+  artist: '',
 })
 // 歌曲相关的存储信息
 const store = usePlayStateStore();
@@ -199,6 +207,13 @@ watch(
       audio.value.src = newVal;
       audio.value.play();
       isPlaying.value = true;
+      // 切换封面和标题
+      const songItem = playList.value[playState.value.index];
+      song.value.albumId = songItem.album.id;
+      song.value.coverImgUrl = songItem.album.picUrl;
+      song.value.title = songItem.name;
+      song.value.artist = getSongArtist(songItem);
+      console.log("给song新值", song.value);
     }
 )
 
@@ -304,6 +319,8 @@ nextTick(() => {
 }
 
 .cover {
+  display: inline-block;
+  border-radius: 50%;
   width: 50px;
   height: 50px;
 }

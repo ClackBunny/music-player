@@ -38,5 +38,6 @@ export type PlayStateType = {
     // 是否显示播放列表
     playList: boolean;
     needChangeUrl: boolean;
-    musicUrl: string
+    musicUrl: string;
+
 };
