@@ -21,7 +21,11 @@
       </div>
     </div>
     <div v-else>
-      没有keywords
+      <a-empty :image="simpleImage">
+        <template #description>
+          <span> 暂无数据,请输入关键词搜索</span>
+        </template>
+      </a-empty>
     </div>
   </div>
 </template>
@@ -36,7 +40,9 @@ import SingleSong from "@/components/SingleSong.vue";
 import Album from "@/components/Album.vue";
 import Singer from "@/components/Singer.vue";
 import SongList from "@/components/SongList.vue";
+import { Empty } from 'ant-design-vue';
 
+const simpleImage = Empty.PRESENTED_IMAGE_SIMPLE;
 const current = ref<string[]>(['']);
 const route = useRoute();
 const router = useRouter();
@@ -104,12 +110,16 @@ watch(
   display: flex;
   height: 100%;
   flex-direction: column;
+  justify-content: center;
+  align-items: center;
   min-width: 300px;
   min-height: 0;
 }
 
 .content-wrapper {
   flex: 1;
+  width: 100%;
+  height: 100%;
   display: flex;
   flex-direction: column;
   min-height: 0; /* 修复Safari的flex布局问题 */

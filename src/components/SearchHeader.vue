@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <div class="left">
-      <a-button :icon="h(LeftOutlined)"/>
+      <a-button :icon="h(LeftOutlined)" @click="router.back()"/>
     </div>
     <div class="right">
       <a-input-search

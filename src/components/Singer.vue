@@ -68,10 +68,13 @@ onMounted(
 <style scoped lang="scss">
 $transitionTime: 0.3s;
 .container {
+
   padding: max(10px, 1vw) max(10px, 1vh);
 }
 
 .artist-list {
+  width: 100%;
+  height: 100%;
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
   gap: 16px;
