@@ -1,0 +1,86 @@
+{
+  "id": "4890160",
+  "name": "music-player",
+  "font_family": "iconfont",
+  "css_prefix_text": "kongxin-",
+  "description": "",
+  "glyphs": [
+    {
+      "icon_id": "6263352",
+      "name": "播放",
+      "font_class": "bofang",
+      "unicode": "e66e",
+      "unicode_decimal": 58990
+    },
+    {
+      "icon_id": "34452956",
+      "name": "add",
+      "font_class": "add",
+      "unicode": "e835",
+      "unicode_decimal": 59445
+    },
+    {
+      "icon_id": "34452990",
+      "name": "delete",
+      "font_class": "delete",
+      "unicode": "e839",
+      "unicode_decimal": 59449
+    },
+    {
+      "icon_id": "34452995",
+      "name": "download",
+      "font_class": "download",
+      "unicode": "e83a",
+      "unicode_decimal": 59450
+    },
+    {
+      "icon_id": "34453000",
+      "name": "follow",
+      "font_class": "follow",
+      "unicode": "e83b",
+      "unicode_decimal": 59451
+    },
+    {
+      "icon_id": "34453001",
+      "name": "follow-fill",
+      "font_class": "follow-fill",
+      "unicode": "e83c",
+      "unicode_decimal": 59452
+    },
+    {
+      "icon_id": "34453019",
+      "name": "mute",
+      "font_class": "mute",
+      "unicode": "e83d",
+      "unicode_decimal": 59453
+    },
+    {
+      "icon_id": "34453036",
+      "name": "play",
+      "font_class": "play",
+      "unicode": "e83f",
+      "unicode_decimal": 59455
+    },
+    {
+      "icon_id": "34453080",
+      "name": "volume",
+      "font_class": "volume",
+      "unicode": "e847",
+      "unicode_decimal": 59463
+    },
+    {
+      "icon_id": "34453171",
+      "name": "category-add",
+      "font_class": "category-add",
+      "unicode": "e84d",
+      "unicode_decimal": 59469
+    },
+    {
+      "icon_id": "34453173",
+      "name": "category",
+      "font_class": "category",
+      "unicode": "e84e",
+      "unicode_decimal": 59470
+    }
+  ]
+}
