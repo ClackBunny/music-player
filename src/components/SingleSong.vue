@@ -2,7 +2,8 @@
   <div class="list-container">
     <!-- 列表头 -->
     <div class="list-header">
-      <div class="songTitle">歌曲标题</div>
+      <div class="number">#</div>
+      <div class="songTitle">标题</div>
       <div class="action-buttons"></div>
       <div class="songArtist">歌手</div>
       <div class="album">专辑</div>
@@ -11,10 +12,13 @@
 
     <!-- 列表项 -->
     <div
-        v-for="(song) in singleSongList"
+        v-for="(song,index) in singleSongList"
         :key="song.id"
         class="list-item"
     >
+      <div class="number">
+        {{ index + 1 }}
+      </div>
       <div class="songTitle">
         {{ getSongTitle(song) }}
       </div>
@@ -95,7 +99,7 @@ watch(totalCount, () => {
 </script>
 
 <style scoped lang="scss">
-$transitionTime: 0.3s;
+$transitionTime: 0.4s;
 
 .list-container {
   display: flex;
@@ -104,32 +108,37 @@ $transitionTime: 0.3s;
 }
 
 
-.list-item {
-  height: 60px;
-  position: relative;
+.list-header, .list-item {
   padding: 12px 16px;
   border-radius: 8px;
-  color: gray;
   border-bottom: 1px solid #eee;
   transition: all $transitionTime;
+  color: #666;
+  font-size: 14px;
   display: flex;
   justify-content: space-between;
   align-items: center;
 
-  &:hover {
-    background-color: rgba(128, 128, 128, 0.2);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  /* 公共样式：每个项横向排，垂直居中 */
+  > div {
+    display: flex;
+    align-items: center;
+    min-width: 0;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
 
-    .action-buttons {
-      opacity: 1;
-      visibility: visible;
-    }
+
+  /* 编号最小空间 */
+  .number {
+    flex: 0 0 30px;
+    justify-content: center;
   }
 
   .songTitle {
     flex: 3;
-    color: #222f;
-    font-weight: bold;
+    margin:0 max(12px, 1vw);
   }
 
   .songArtist {
@@ -169,38 +178,26 @@ $transitionTime: 0.3s;
   }
 }
 
-.list-header {
-  height: 60px;
-  position: sticky;
-  background-color: white;
-  top: 0;
-  z-index: 10;
-  padding: 12px 16px;
-  border-bottom: 2px solid #ddd;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-
-  .songTitle {
-    flex: 3;
-  }
-
-  .songArtist {
-    flex: 2;
-  }
-
-  .album {
-    flex: 1;
-  }
-
-  .songDuration {
-    flex: 1;
-    display: flex;
-    justify-content: flex-end;
-  }
+.list-item:hover {
+  background-color: rgba(128, 128, 128, 0.2);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 
   .action-buttons {
-    flex: 1;
+    opacity: 1;
+    visibility: visible;
   }
 }
+
+.list-item {
+  .songTitle {
+    color: #222f;
+    font-weight: bold;
+  }
+}
+
+.list-header {
+  border-radius: 0;
+}
+
+
 </style>

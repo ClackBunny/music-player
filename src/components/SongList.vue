@@ -77,7 +77,7 @@ onMounted(
 </script>
 
 <style scoped lang="scss">
-$transitionTime: 0.3s;
+$transitionTime: 0.4s;
 
 .list-item:hover {
   background-color: rgba(128, 128, 128, 0.2);

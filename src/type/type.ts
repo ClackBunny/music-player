@@ -135,3 +135,12 @@ export function getSongArtist(song: SongItem): string {
         return "未知"
     }
 }
+
+// 获取专辑的名字
+export function getAlbumTitle(album: Album): string {
+    if (album.alias && album.alias.length >= 1) {
+        return album.name + " (" + album.alias.join(",") + ")";
+    } else {
+        return album.name;
+    }
+}
