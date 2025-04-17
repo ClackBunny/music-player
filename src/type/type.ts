@@ -66,8 +66,8 @@ export interface Track {
 export interface Artist {
     name: string;
     id: number;
-    picUrl: string;
     alias: string[];
+    picUrl?: string;
     picId?: number;
     img1v1Id?: number;
     briefDesc?: string;
@@ -81,10 +81,10 @@ export interface Artist {
 export interface Album {
     id: number;
     name: string;
-    status: number;
-    size: number;
-    publishTime: number;
-    artist: Artist;
+    publishTime?: number;
+    artist?: Artist;
+    size?: number;
+    status?: number;
     idStr?: string | null;
     type?: string;
     picId?: number | string;

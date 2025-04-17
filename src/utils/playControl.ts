@@ -4,6 +4,7 @@ import { storeToRefs } from "pinia";
 import { checkMusic, songUrl } from "@/api/song.ts";
 import type { SongItem } from "@/type/type.ts";
 import { getAlbumPicUrl } from "@/api/album.ts";
+import { getPlaylistTrackAll } from "@/api/playlist.ts";
 
 const store = usePlayStateStore()
 const {playState, playList} = storeToRefs(store)
@@ -15,10 +16,8 @@ const {playState, playList} = storeToRefs(store)
 export async function handlePlay(indexInList: number = 0) {
     // 判断歌曲在不在列表中
     if (indexInList < 0 || indexInList >= playList.value.length) {
-        if (indexInList >= playList.value.length) {
-            message.info("歌曲不在播放列表中");
-            return;
-        }
+        message.info("歌曲不在播放列表中");
+        return;
     }
 
     const songId = playList.value[indexInList].id;
@@ -59,7 +58,7 @@ export async function addToPlayList(song: SongItem) {
 }
 
 /**
- * 添加到播放列表
+ * 添加到播放列表, 不获取专辑封面
  * @param song
  */
 export function addToPlayListWithoutPic(song: SongItem) {
@@ -159,6 +158,50 @@ export function clearPlayList() {
             playState.value.index = -1;
             playState.value.musicUrl = '';
             message.success("播放列表已清空");
+        }
+    });
+}
+
+/**
+ * 添加歌单到播放列表
+ * @param songListId 歌单ID
+ * @param needMessage 是否需要通知,默认true
+ */
+export async function addSongListToPlayList(songListId: number, needMessage: boolean = true) {
+    const songList = (await getPlaylistTrackAll(songListId)).songs;
+    // 重复的歌曲不添加
+    const existSongId = new Set(playList.value.map(value => value.id))
+    const needToAddSongList = songList.filter(item => !existSongId.has(item.id));
+    const repeatNumber = songList.length - needToAddSongList.length;
+    console.log("songList", songList);
+    console.log("needToAddSongList", needToAddSongList);
+    console.log("repeat", songList.filter(item => existSongId.has(item.id)));
+    playList.value.push(...needToAddSongList);
+    if (needMessage) {
+        message.info(`成功添加${needToAddSongList.length}首歌` +
+            (repeatNumber ? `,重复${repeatNumber}` : ''));
+    }
+}
+
+/**
+ * 播放歌单
+ *
+ * @param songListId 歌单ID
+ * @param songListName 歌单名字, 用于二次确认
+ */
+export async function playSongList(songListId: number, songListName: string) {
+    Modal.confirm({
+        title: "播放歌单",
+        content: `确定要播放'${songListName}'歌单吗？这将清空当前播放列表。`,
+        okText: "播放",
+        cancelText: "取消",
+        async onOk() {
+            playList.value = [];
+            await addSongListToPlayList(songListId, false);
+            playState.value.index = 0;
+            playState.value.musicUrl = '';
+            await handlePlay(0);
+            message.success("播放列表已更新");
         }
     });
 }

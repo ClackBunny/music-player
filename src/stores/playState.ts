@@ -1,11 +1,11 @@
 import { defineStore } from "pinia";
-import { reactive, ref } from "vue";
+import { ref } from "vue";
 import type { PlayStateType } from "@/type/playState.ts";
 import type { PlayList } from "@/type/type.ts";
 
 export const usePlayStateStore = defineStore('playState', () => {
 // 播放状态
-    const playState = reactive<PlayStateType>({
+    const playState = ref<PlayStateType>({
         index: -1,
         isPlaying: false,
         volume: 60,
@@ -25,7 +25,7 @@ export const usePlayStateStore = defineStore('playState', () => {
         needChangeUrl: true,
         musicUrl: ""
     });
-    const playList = reactive<PlayList>([
+    const playList = ref<PlayList>([
             {
                 id: 347230,
                 name: "海阔天空",

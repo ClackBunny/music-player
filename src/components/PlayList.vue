@@ -37,7 +37,6 @@
       <div
           class="hover-overlay"
           v-show="hoveredItem === index">
-
         <span class="iconfont kongxin-play" @click="handlePlay(index)" title="播放"/>
         <span class="iconfont kongxin-follow" @click="handleFollow(song.id)" title="喜欢"/>
         <span class="iconfont kongxin-delete" @click="handleDelete(index)" title="删除"/>

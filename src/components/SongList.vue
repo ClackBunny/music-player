@@ -27,9 +27,9 @@
     </div>
     <div class="action-buttons">
         <span class="iconfont kongxin-play"
-              @click="console.log('播放按钮');"
+              @click="playSongList(songList.id,songList.name)"
               title="播放歌单"/>
-      <span class="iconfont kongxin-category-add" @click="console.log('整个歌单添加进列表');" title="添加进列表"/>
+      <span class="iconfont kongxin-category-add" @click="addSongListToPlayList(songList.id);" title="添加进列表"/>
     </div>
     <div class="trackCount">
       {{ songList.trackCount }}首
@@ -51,6 +51,7 @@
 import { onMounted, ref, toRefs } from "vue";
 import { search } from "@/api/search.ts";
 import { SearchType, type SongListItem, type SongListResultData } from "@/type/searchType.ts";
+import { addSongListToPlayList, playSongList } from "@/utils/playControl.ts";
 
 const props = defineProps<{ 'keyword': string, 'type': string }>();
 const {keyword, type} = toRefs(props);
@@ -68,6 +69,7 @@ const loadData = async (keyword: string) => {
   listOfSongLists.value = result.playlists
   emit("send-count", totalCount.value);
 }
+
 onMounted(
     () => {
       // console.log(keyword, type);
