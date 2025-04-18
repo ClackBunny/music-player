@@ -3,7 +3,7 @@ import { usePlayStateStore } from "@/stores/playState.ts";
 import { storeToRefs } from "pinia";
 import { checkMusic, songUrl } from "@/api/song.ts";
 import type { SongItem } from "@/type/type.ts";
-import { getAlbumPicUrl } from "@/api/album.ts";
+import { getAlbum, getAlbumPicUrl } from "@/api/album.ts";
 import { getPlaylistTrackAll } from "@/api/playlist.ts";
 
 const store = usePlayStateStore()
@@ -171,18 +171,7 @@ export function clearPlayList() {
  */
 export async function addSongListToPlaylist(songListId: number, needMessage: boolean = true) {
     const songList = (await getPlaylistTrackAll(songListId)).songs;
-    // 重复的歌曲不添加
-    const existSongId = new Set(playList.value.map(value => value.id))
-    const needToAddSongList = songList.filter(item => !existSongId.has(item.id));
-    const repeatNumber = songList.length - needToAddSongList.length;
-    console.log("songList", songList);
-    console.log("needToAddSongList", needToAddSongList);
-    console.log("repeat", songList.filter(item => existSongId.has(item.id)));
-    playList.value.push(...needToAddSongList);
-    if (needMessage) {
-        message.info(`成功添加${needToAddSongList.length}首歌` +
-            (repeatNumber ? `,重复${repeatNumber}` : ''));
-    }
+    batchAddToPlaylist(songList, needMessage);
 }
 
 /**
@@ -207,6 +196,62 @@ export async function playSongList(songListId: number, songListName: string) {
             message.success("播放列表已更新");
         }
     });
+}
+
+/**
+ * 添加进列表
+ *
+ * @param albumId 专辑ID
+ * @param needMessage 是否需要弹窗提醒
+ */
+export async function addAlbumToPlaylist(albumId: number, needMessage: boolean = true) {
+    const songs = (await getAlbum(albumId)).songs;
+    batchAddToPlaylist(songs, needMessage);
+}
+
+/**
+ * 播放专辑
+ *
+ * @param albumId 专辑ID
+ * @param albumName 专辑名字, 用于二次确认
+ */
+export async function playAlbum(albumId: number, albumName: string) {
+    Modal.confirm({
+        title: "播放歌单",
+        content: `确定要播放'${albumName}'专辑吗？这将清空当前播放列表。`,
+        okText: "播放",
+        cancelText: "取消",
+        maskClosable: true,
+        async onOk() {
+            playList.value = [];
+            await addAlbumToPlaylist(albumId, false);
+            playState.value.index = 0;
+            playState.value.musicUrl = '';
+            await handlePlay(0);
+            message.success("播放列表已更新");
+        }
+    });
+}
+
+/**
+ * 批量添加歌曲到播放列表
+ *
+ * @param songList 歌曲列表
+ * @param needMessage 是否需要弹窗提醒
+ */
+function batchAddToPlaylist(songList: SongItem[], needMessage: boolean = true) {
+    // 重复的歌曲不添加
+    const existSongId = new Set(playList.value.map(value => value.id))
+    const needToAddSongList = songList.filter(item => !existSongId.has(item.id));
+    const repeatNumber = songList.length - needToAddSongList.length;
+    console.log("songList", songList);
+    console.log("needToAddSongList", needToAddSongList);
+    console.log("repeat", songList.filter(item => existSongId.has(item.id)));
+    playList.value.push(...needToAddSongList);
+    if (needMessage) {
+        message.info(`成功添加${needToAddSongList.length}首歌` +
+            (repeatNumber ? `,重复${repeatNumber}` : ''));
+    }
 }
 
 // ==================== 内部方法 ====================

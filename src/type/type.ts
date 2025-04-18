@@ -66,7 +66,7 @@ export interface Track {
 export interface Artist {
     name: string;
     id: number;
-    alias: string[];
+    alias?: string[];
     picUrl?: string;
     picId?: number;
     img1v1Id?: number;

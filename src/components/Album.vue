@@ -24,9 +24,9 @@
 
     <div class="action-buttons">
         <span class="iconfont kongxin-play"
-              @click="console.log('播放专辑');"
+              @click="playAlbum(album.id,album.name)"
               title="播放专辑"/>
-      <span class="iconfont kongxin-category-add" @click="console.log('整个专辑添加进列表');" title="添加进列表"/>
+      <span class="iconfont kongxin-category-add" @click="addAlbumToPlaylist(album.id)" title="添加进列表"/>
     </div>
     <div class="albumSize">
       {{ album.size }}首
@@ -46,6 +46,7 @@ import { onMounted, ref, toRefs } from "vue";
 import { type AlbumResultData, SearchType } from "@/type/searchType.ts";
 import { type Album, getAlbumTitle } from "@/type/type.ts";
 import dayjs from "dayjs";
+import { addAlbumToPlaylist, playAlbum } from "@/utils/playControl.ts";
 
 // 定义组件入参props和自定义事件(send-count)
 const props = defineProps<{ 'keyword': string, 'type': string }>();
