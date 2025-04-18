@@ -19,7 +19,7 @@
       <div class="number">
         {{ index + 1 }}
       </div>
-      <div class="songTitle">
+      <div class="songTitle" :title="getSongTitle(song)">
         {{ getSongTitle(song) }}
       </div>
       <div class="action-buttons">
@@ -29,11 +29,11 @@
         <span class="iconfont kongxin-category-add" @click="addToPlayList(song)" title="添加进列表"/>
         <span class="iconfont kongxin-follow" @click="handleFollow(song.id)" title="喜欢"/>
       </div>
-      <div class="songArtist">
+      <div class="songArtist" :title="getSongArtist(song)">
         {{ getSongArtist(song) }}
       </div>
 
-      <div class="album">
+      <div class="album" :title="song.album.name">
         {{ song.album.name }}
       </div>
       <div class="songDuration">
@@ -101,23 +101,24 @@ watch(totalCount, () => {
 <style scoped lang="scss">
 $transitionTime: 0.4s;
 
-.list-container {
-  display: flex;
-  flex-direction: column;
-  gap: 1px;
+.list-item:hover {
+  background-color: rgba(128, 128, 128, 0.2);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+
+  .action-buttons {
+    opacity: 1;
+    visibility: visible;
+  }
 }
 
-
 .list-header, .list-item {
-  padding: 12px 16px;
-  border-radius: 8px;
-  border-bottom: 1px solid #eee;
-  transition: all $transitionTime;
-  color: #666;
-  font-size: 14px;
   display: flex;
-  justify-content: space-between;
   align-items: center;
+  padding: 12px 16px;
+  border-bottom: 1px solid #eee;
+  border-radius: 8px;
+  font-size: 14px;
+  transition: all $transitionTime;
 
   /* 公共样式：每个项横向排，垂直居中 */
   > div {
@@ -138,7 +139,7 @@ $transitionTime: 0.4s;
 
   .songTitle {
     flex: 3;
-    margin:0 max(12px, 1vw);
+    margin: 0 max(12px, 1vw);
   }
 
   .songArtist {
@@ -155,12 +156,23 @@ $transitionTime: 0.4s;
     justify-content: flex-end;
   }
 
+  .songArtist, .album, .songTitle {
+    display: inline-block;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    max-width: 100%;
+  }
+
   .action-buttons {
     flex: 1;
     display: flex;
     gap: 10px;
     top: 50%;
     opacity: 0;
+    min-width: 102px;
+    padding-right: max(10px, 1vw);
+    justify-content: end;
     transition: opacity $transitionTime ease, visibility $transitionTime;
     visibility: hidden;
   }
@@ -175,16 +187,6 @@ $transitionTime: 0.4s;
     opacity: 1;
     transform: scale(1.1);
     color: #222;
-  }
-}
-
-.list-item:hover {
-  background-color: rgba(128, 128, 128, 0.2);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-
-  .action-buttons {
-    opacity: 1;
-    visibility: visible;
   }
 }
 

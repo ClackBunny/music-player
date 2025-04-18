@@ -18,4 +18,5 @@ app.use(Antd)
 // app.use(Menu)
 
 app.config.globalProperties.$message = message
+app.config.performance = true
 app.mount('#app')

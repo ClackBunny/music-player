@@ -6,7 +6,7 @@
     <div class="action-buttons"></div>
     <div class="albumSize">歌曲数</div>
     <div class="albumArtistName">创建者</div>
-    <div class="albumPublishTime">收藏</div>
+    <div class="albumPublishTime">发布时间</div>
   </div>
 
   <!--  歌单的列表-->
@@ -18,7 +18,7 @@
       <img :src="album.picUrl" alt="开头图片">
     </div>
 
-    <div class="albumTitle">
+    <div class="albumTitle" :title="getAlbumTitle(album)">
       {{ getAlbumTitle(album) }}
     </div>
 
@@ -31,11 +31,11 @@
     <div class="albumSize">
       {{ album.size }}首
     </div>
-    <div class="albumArtistName">
-      {{ album.artist.name }}
+    <div class="albumArtistName" :title="album.artist?.name">
+      {{ album.artist?.name }}
     </div>
     <div class="albumPublishTime">
-      {{ album.publishTime }}
+      {{ transformPublishTime(album.publishTime) }}
     </div>
   </div>
 </template>
@@ -45,6 +45,7 @@ import { search } from "@/api/search.ts";
 import { onMounted, ref, toRefs } from "vue";
 import { type AlbumResultData, SearchType } from "@/type/searchType.ts";
 import { type Album, getAlbumTitle } from "@/type/type.ts";
+import dayjs from "dayjs";
 
 // 定义组件入参props和自定义事件(send-count)
 const props = defineProps<{ 'keyword': string, 'type': string }>();
@@ -62,6 +63,11 @@ const loadData = async (keyword: string) => {
   totalCount.value = res.albumCount;
   emit("send-count", totalCount.value);
 }
+
+function transformPublishTime(timeStamp: number | undefined) {
+  return dayjs(timeStamp).format("YYYY-MM-DD");
+}
+
 onMounted(
     () => {
       loadData(keyword.value)
@@ -129,6 +135,10 @@ $transitionTime: 0.3s;
     align-items: flex-start;
     justify-content: center;
     overflow: hidden;
+    display: inline-block;
+    white-space: nowrap; // 不换行
+    text-overflow: ellipsis; //过长显示...
+    max-width: 100%;
   }
 
   /* 其他字段自动伸缩，但保留最小宽度防止内容挤压 */
@@ -139,6 +149,11 @@ $transitionTime: 0.3s;
     min-width: 60px;
     color: #666;
     justify-content: flex-start;
+    display: inline-block;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    max-width: 100%;
   }
 
   /* 默认按钮隐藏 */

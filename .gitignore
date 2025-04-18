@@ -14,6 +14,10 @@ dist-ssr
 coverage
 *.local
 
+# 忽略临时文件
+temp.*
+Temp.*
+
 /cypress/videos/
 /cypress/screenshots/
 

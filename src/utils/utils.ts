@@ -47,3 +47,14 @@ export function secondsToMinutes(seconds: number) {
     const s = Math.floor(seconds % 60)
     return `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`
 }
+
+/**
+ * 如果大于1w就用万做单位
+ * @param count
+ */
+export function handleCount(count: number) {
+    if (count > 10000) {
+        return (count / 10000).toFixed(1) + '万'
+    }
+    return count;
+}

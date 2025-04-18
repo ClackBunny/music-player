@@ -121,6 +121,7 @@ export function handleDelete(index: number) {
         content: `确定要从播放列表中删除《${song.name}》吗？`,
         okText: "删除",
         cancelText: "取消",
+        maskClosable: true,
         async onOk() {
             const wasPlaying = playState.value.index === index;
             playList.value.splice(index, 1);
@@ -153,6 +154,7 @@ export function clearPlayList() {
         content: "确定要清空播放列表吗？这将停止当前播放。",
         okText: "清空",
         cancelText: "取消",
+        maskClosable: true,
         onOk() {
             playList.value = [];
             playState.value.index = -1;
@@ -167,7 +169,7 @@ export function clearPlayList() {
  * @param songListId 歌单ID
  * @param needMessage 是否需要通知,默认true
  */
-export async function addSongListToPlayList(songListId: number, needMessage: boolean = true) {
+export async function addSongListToPlaylist(songListId: number, needMessage: boolean = true) {
     const songList = (await getPlaylistTrackAll(songListId)).songs;
     // 重复的歌曲不添加
     const existSongId = new Set(playList.value.map(value => value.id))
@@ -195,9 +197,10 @@ export async function playSongList(songListId: number, songListName: string) {
         content: `确定要播放'${songListName}'歌单吗？这将清空当前播放列表。`,
         okText: "播放",
         cancelText: "取消",
+        maskClosable: true,
         async onOk() {
             playList.value = [];
-            await addSongListToPlayList(songListId, false);
+            await addSongListToPlaylist(songListId, false);
             playState.value.index = 0;
             playState.value.musicUrl = '';
             await handlePlay(0);

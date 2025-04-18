@@ -18,10 +18,10 @@
       <img :src="songList.coverImgUrl" alt="开头图片">
     </div>
     <div class="title">
-      <div class="songListName">
+      <div class="songListName" :title="songList.name">
         {{ songList.name }}
       </div>
-      <div class="recommendText">
+      <div class="recommendText" :title="songList.recommendText">
         {{ songList.recommendText }}
       </div>
     </div>
@@ -29,7 +29,7 @@
         <span class="iconfont kongxin-play"
               @click="playSongList(songList.id,songList.name)"
               title="播放歌单"/>
-      <span class="iconfont kongxin-category-add" @click="addSongListToPlayList(songList.id);" title="添加进列表"/>
+      <span class="iconfont kongxin-category-add" @click="addSongListToPlaylist(songList.id);" title="添加进列表"/>
     </div>
     <div class="trackCount">
       {{ songList.trackCount }}首
@@ -38,11 +38,11 @@
       {{ songList.creator.nickname }}
     </div>
     <div class="bookCount">
-      {{ songList.bookCount }}
+      {{ handleCount(songList.bookCount) }}
     </div>
     <!--    大于10w需要更换单位-->
     <div class="playCount">
-      {{ songList.playCount / 10000 }}
+      {{ handleCount(songList.playCount) }}
     </div>
   </div>
 </template>
@@ -51,7 +51,8 @@
 import { onMounted, ref, toRefs } from "vue";
 import { search } from "@/api/search.ts";
 import { SearchType, type SongListItem, type SongListResultData } from "@/type/searchType.ts";
-import { addSongListToPlayList, playSongList } from "@/utils/playControl.ts";
+import { addSongListToPlaylist, playSongList } from "@/utils/playControl.ts";
+import { handleCount } from "../utils/utils.ts";
 
 const props = defineProps<{ 'keyword': string, 'type': string }>();
 const {keyword, type} = toRefs(props);
@@ -133,11 +134,18 @@ $transitionTime: 0.4s;
 
   /* 标题部分上下排列，占比更大 */
   .title {
-    flex: 2;
+    flex: 5;
     flex-direction: column;
     align-items: flex-start;
     justify-content: center;
     overflow: hidden;
+  }
+
+  .songListName, .recommendText {
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    max-width: 100%;
   }
 
   .songListName {
@@ -160,6 +168,8 @@ $transitionTime: 0.4s;
     min-width: 60px;
     color: #666;
     justify-content: flex-start;
+    white-space: normal; // 允许换行
+    word-break: break-word; // 单词太长时也断开
   }
 
   /* 默认按钮隐藏 */
@@ -169,6 +179,9 @@ $transitionTime: 0.4s;
     gap: 10px;
     top: 50%;
     opacity: 0;
+    min-width: 68px;
+    padding-right: max(10px, 1vw);
+    justify-content: end;
     transition: opacity $transitionTime ease, visibility $transitionTime;
     visibility: hidden;
     /* 按钮样式你可以自定义美化 */
