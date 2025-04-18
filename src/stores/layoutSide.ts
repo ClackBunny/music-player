@@ -8,6 +8,7 @@ export const useLayoutSideStore = defineStore('layoutSide', () => {
     const routeMap = new Map([
         ["temp", "/temp"],
         ["search", "/search"],
+        ["login", "/login"],
     ])
     const menuItems = ref<Array<ItemType>>([
         {
@@ -26,10 +27,10 @@ export const useLayoutSideStore = defineStore('layoutSide', () => {
             type: 'divider',
         },
         {
-            key: 'recommend',
+            key: 'login',
             icon: () => h(SettingOutlined),
-            label: 'recommend',
-            title: 'recommend',
+            label: 'login',
+            title: 'login',
         },
         {
             key: 'sub1',

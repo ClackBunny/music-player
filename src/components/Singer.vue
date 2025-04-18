@@ -5,13 +5,13 @@
           class="singer-card"
           v-for="(singer,index) in singerList"
           :key="singer.id"
-          @click="handleClick(singer, index, $event)"
-          @contextmenu.prevent="handleClick(singer, index, $event)"
-      >
+          @click="goDetail(singer.id)">
         <div class="singerImgWrapper">
           <img :src="singer.picUrl" :alt="singer.name" class="singerImg"/>
           <div class="playIcon">
-            <span title="左键播放,右键添加进列表" class="iconfont kongxin-bofang"/>
+            <span title="左键播放,右键添加进列表" class="iconfont kongxin-bofang"
+                  @click="handleClick(singer, index, $event)"
+                  @contextmenu.prevent="handleClick(singer, index, $event)"/>
           </div>
         </div>
         <div class="singerInfo">
@@ -28,6 +28,8 @@ import { onMounted, ref, toRefs } from "vue";
 import { search } from "@/api/search.ts";
 import { SearchType, type SingerResultData } from "@/type/searchType.ts";
 import type { Artist } from "@/type/type.ts";
+import { addSingerToPlaylist, playSingerHotSongs } from "@/utils/playControl.ts";
+import { message } from "ant-design-vue";
 
 // 定义组件入参props和自定义事件(send-count)
 const props = defineProps<{ 'keyword': string, 'type': string }>();
@@ -50,12 +52,17 @@ function handleClick(singer: Artist, index: number, e: MouseEvent) {
   console.log("点击了第", index, "个歌手：", singer.name);
 
   if (e.button === 0) {
-    console.log("左键点击")
     // 左键
+    playSingerHotSongs(singer.id, singer.name);
   } else if (e.button === 2) {
-    console.log("右键点击")
     // 右键
+    addSingerToPlaylist(singer.id);
   }
+}
+
+function goDetail(artistId: number) {
+  console.log("去歌手详情", artistId);
+  message.info("歌手详情页开发ing")
 }
 
 onMounted(

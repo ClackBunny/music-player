@@ -5,6 +5,7 @@ import { checkMusic, songUrl } from "@/api/song.ts";
 import type { SongItem } from "@/type/type.ts";
 import { getAlbum, getAlbumPicUrl } from "@/api/album.ts";
 import { getPlaylistTrackAll } from "@/api/playlist.ts";
+import { getArtist } from "@/api/artist.ts";
 
 const store = usePlayStateStore()
 const {playState, playList} = storeToRefs(store)
@@ -29,7 +30,6 @@ export async function handlePlay(indexInList: number = 0) {
     }
 
     // 2. 获取歌曲 URL
-    console.log("获取ing");
     const url = await getMusicUrl(songId)
 
     if (!url) {
@@ -225,6 +225,41 @@ export async function playAlbum(albumId: number, albumName: string) {
         async onOk() {
             playList.value = [];
             await addAlbumToPlaylist(albumId, false);
+            playState.value.index = 0;
+            playState.value.musicUrl = '';
+            await handlePlay(0);
+            message.success("播放列表已更新");
+        }
+    });
+}
+
+/**
+ * 添加歌手的热门歌曲进列表
+ *
+ * @param artistId 歌手ID
+ * @param needMessage 是否需要弹窗提醒
+ */
+export async function addSingerToPlaylist(artistId: number, needMessage: boolean = true) {
+    const songs = (await getArtist(artistId)).hotSongs;
+    batchAddToPlaylist(songs, needMessage);
+}
+
+/**
+ * 播放歌手热门歌曲
+ *
+ * @param artistId 歌手ID
+ * @param artistName 歌手名字, 用于二次确认
+ */
+export async function playSingerHotSongs(artistId: number, artistName: string) {
+    Modal.confirm({
+        title: "播放歌手热门歌曲",
+        content: `确定要播放'${artistName}的热门歌曲吗？这将清空当前播放列表。`,
+        okText: "播放",
+        cancelText: "取消",
+        maskClosable: true,
+        async onOk() {
+            playList.value = [];
+            await addSingerToPlaylist(artistId, false);
             playState.value.index = 0;
             playState.value.musicUrl = '';
             await handlePlay(0);

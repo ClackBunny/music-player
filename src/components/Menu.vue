@@ -22,7 +22,6 @@
 
     </div>
   </a-layout-sider>
-
 </template>
 
 <script setup lang="ts">
