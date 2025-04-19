@@ -151,7 +151,8 @@ $transitionTime: 0.4s;
   }
 
   .songDuration {
-    flex: 1;
+    flex: 0.5;
+    min-width: 50px;
     display: flex;
     justify-content: flex-end;
   }

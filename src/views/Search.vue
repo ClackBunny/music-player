@@ -36,10 +36,10 @@ import { useSearchStore } from "@/stores/search.ts";
 import { storeToRefs } from "pinia";
 import { useRoute, useRouter } from "vue-router";
 import { queryToString } from "@/utils/utils.ts";
-import SingleSong from "@/components/SingleSong.vue";
-import Album from "@/components/Album.vue";
-import Singer from "@/components/Singer.vue";
-import SongList from "@/components/SongList.vue";
+import SearchSingleSong from "@/components/SearchSingleSong.vue";
+import SearchAlbum from "@/components/SearchAlbum.vue";
+import SearchSinger from "@/components/SearchSinger.vue";
+import SearchSongList from "@/components/SearchSongList.vue";
 import { Empty } from 'ant-design-vue';
 
 const simpleImage = Empty.PRESENTED_IMAGE_SIMPLE;
@@ -53,10 +53,10 @@ const totalCount = ref(0);
 
 // 选项卡配置
 const tabs = [
-  {name: 'singleSong', desc: '首单曲', component: SingleSong},
-  {name: 'songList', desc: '个歌单', component: SongList},
-  {name: 'singer', desc: '个歌手', component: Singer},
-  {name: 'album', desc: '个专辑', component: Album}
+  {name: 'singleSong', desc: '首单曲', component: SearchSingleSong},
+  {name: 'songList', desc: '个歌单', component: SearchSongList},
+  {name: 'singer', desc: '个歌手', component: SearchSinger},
+  {name: 'album', desc: '个专辑', component: SearchAlbum}
 ]
 // 计算当前显示的组件
 const activeTab = () => {
