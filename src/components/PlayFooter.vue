@@ -68,7 +68,6 @@
           :mask="true"
           title="播放列表"
           placement="right"
-          @after-open-change="(bool: boolean)=>{console.log('open', bool);}"
       >
         <template #extra>
           <a-button style="margin-right: 8px" @click="clearPlayList()">清空列表</a-button>
@@ -191,7 +190,6 @@ watch(
 watch(
     () => playState.value.musicUrl,
     (newVal) => {
-      console.log(newVal)
       audio.value.pause();
       audio.value.src = newVal;
       audio.value.play();
@@ -202,7 +200,6 @@ watch(
       song.value.coverImgUrl = songItem.album.picUrl;
       song.value.title = songItem.name;
       song.value.artist = getSongArtist(songItem);
-      console.log("给song新值", song.value);
     }
 )
 

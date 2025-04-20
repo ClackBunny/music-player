@@ -18,8 +18,8 @@
       <a-menu v-model:selectedKeys="current" mode="horizontal" :items="menuItems" @click="clickItem"/>
       <div class="tabContentWrapper">
         <div v-if="totalCount > 0" class="tabContent">
-          <component :is="findTab().component" :keyword="keyword" :type="current[0]"
-                     :data="apiData"/>
+          <component v-if="apiData" :is="findTab().component" :keyword="keyword" :type="current[0]"
+                     :data="apiData as any"/>
         </div>
         <a-empty v-else :image="simpleImage">
           <template #description>
@@ -119,7 +119,6 @@ function clickItem(item: any) {
 }
 
 async function loadData(keyword: string) {
-  console.log("loadData", keyword);
   const offset = (page.value - 1) * pageSize.value;
   let res = await search(keyword, findTab().searchType, offset, pageSize.value) as SearchApiResponse;
   apiData.value = res.result;

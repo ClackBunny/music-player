@@ -10,13 +10,10 @@ import "@/assets/iconfont/iconfont.css"
 
 const app = createApp(App)
 const env = import.meta.env
-console.log(env)
+
 app.use(pinia)
 app.use(router)
 app.use(Antd)
-// app.use(Button)
-// app.use(Layout)
-// app.use(Menu)
 
 app.config.globalProperties.$message = message
 app.config.performance = true

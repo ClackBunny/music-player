@@ -103,7 +103,6 @@ function closeLogin() {
 
 async function getUserInfo() {
   let res = await loginStatus(Date.now());
-  console.log(res);
   if (res.data.profile) {
     myInfo.value.userId = res.data.profile.userId;
     myInfo.value.nickname = res.data.profile.nickname;
@@ -113,7 +112,6 @@ async function getUserInfo() {
     myInfo.value.followCount = user.follows;
     myInfo.value.followedCount = user.followeds;
     hasLogin.value = true;
-    console.log("更新userInfo done");
   } else {
     //myInfo恢复成初始值
     myInfo.value = {...initialUserInfo};
@@ -124,7 +122,7 @@ onMounted(async () => {
   await getUserInfo();
 })
 watch(() => hasLogin.value, (newVal) => {
-  console.log("登录状态变化了");
+  // 登录状态变化了
   getUserInfo()
 },)
 </script>

@@ -24,7 +24,7 @@ const attemptedNew = ref(false)
  * 加载失败时尝试获取新图或使用默认图
  */
 function handleError(): void {
-  console.log("出错了, currentSrc", currentSrc.value,)
+  console.log("加载图片出错了, currentSrc", currentSrc.value,)
   if (!attemptedNew.value) {
     fetchNewPic()
   } else {
@@ -38,7 +38,6 @@ function handleError(): void {
 async function fetchNewPic(): Promise<void> {
   try {
     const newUrl = await getAlbumPicUrl(props.albumId)
-    console.log("获取新图片", newUrl)
     if (newUrl) {
       currentSrc.value = newUrl
       attemptedNew.value = true
@@ -55,7 +54,6 @@ onMounted(() => {
   if (props.picUrl) {
     currentSrc.value = props.picUrl
   } else {
-    console.log('mounted')
     fetchNewPic()
   }
 })

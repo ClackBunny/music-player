@@ -279,9 +279,6 @@ function batchAddToPlaylist(songList: SongItem[], needMessage: boolean = true) {
     const existSongId = new Set(playList.value.map(value => value.id))
     const needToAddSongList = songList.filter(item => !existSongId.has(item.id));
     const repeatNumber = songList.length - needToAddSongList.length;
-    console.log("songList", songList);
-    console.log("needToAddSongList", needToAddSongList);
-    console.log("repeat", songList.filter(item => existSongId.has(item.id)));
     playList.value.push(...needToAddSongList);
     if (needMessage) {
         message.info(`成功添加${needToAddSongList.length}首歌` +
@@ -290,19 +287,16 @@ function batchAddToPlaylist(songList: SongItem[], needMessage: boolean = true) {
 }
 
 // ==================== 内部方法 ====================
-
+// 检查歌曲是否有用
 async function check(songId: number): Promise<boolean> {
     const res = await checkMusic(songId)
-    console.log(res)
-    const result = (res.code === 200 && res.success)
-    console.log("检查结果:", result)
-    return result
+    return (res.code === 200 && res.success)
 }
 
+// 获取音乐的url
 async function getMusicUrl(songId: number): Promise<string | null> {
     try {
         const res = await songUrl(songId)
-        console.log("songUrl", res)
         if (res.code !== 200 || res.data.length <= 0) {
             message.error("songUrl 获取失败. " + res.data)
             return null

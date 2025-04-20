@@ -35,8 +35,6 @@ const props = defineProps<{ 'keyword': string, 'type': string, data: SingerResul
 const {data} = toRefs(props);
 
 function handleClick(singer: Artist, index: number, e: MouseEvent) {
-  console.log("点击了第", index, "个歌手：", singer.name);
-
   if (e.button === 0) {
     // 左键
     playSingerHotSongs(singer.id, singer.name);
@@ -47,7 +45,6 @@ function handleClick(singer: Artist, index: number, e: MouseEvent) {
 }
 
 function goDetail(artistId: number) {
-  console.log("去歌手详情", artistId);
   message.info("歌手详情页开发ing")
 }
 
