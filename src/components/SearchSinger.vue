@@ -3,7 +3,7 @@
     <div class="artist-list">
       <div
           class="singer-card"
-          v-for="(singer,index) in singerList"
+          v-for="(singer,index) in data?.artists"
           :key="singer.id"
           @click="goDetail(singer.id)">
         <div class="singerImgWrapper">
@@ -24,29 +24,15 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref, toRefs } from "vue";
-import { search } from "@/api/search.ts";
-import { SearchType, type SingerResultData } from "@/type/searchType.ts";
+import { toRefs } from "vue";
+import { type SingerResultData } from "@/type/searchType.ts";
 import type { Artist } from "@/type/type.ts";
 import { addSingerToPlaylist, playSingerHotSongs } from "@/utils/playControl.ts";
 import { message } from "ant-design-vue";
 
 // 定义组件入参props和自定义事件(send-count)
-const props = defineProps<{ 'keyword': string, 'type': string }>();
-const {keyword, type} = toRefs(props);
-const emit = defineEmits(['send-count']);
-
-const singerList = ref<Artist[]>([])
-const totalCount = ref(0)
-
-console.log("歌手", keyword, type);
-
-const loadData = async (keyword: string) => {
-  let res = (await search(keyword, SearchType.SINGER)).result as SingerResultData;
-  singerList.value = res.artists;
-  totalCount.value = res.artistCount;
-  emit("send-count", totalCount.value);
-}
+const props = defineProps<{ 'keyword': string, 'type': string, data: SingerResultData }>();
+const {data} = toRefs(props);
 
 function handleClick(singer: Artist, index: number, e: MouseEvent) {
   console.log("点击了第", index, "个歌手：", singer.name);
@@ -65,23 +51,16 @@ function goDetail(artistId: number) {
   message.info("歌手详情页开发ing")
 }
 
-onMounted(
-    () => {
-      loadData(keyword.value)
-    }
-)
 </script>
 
 <style scoped lang="scss">
 $transitionTime: 0.3s;
 .container {
-
   padding: max(10px, 1vw) max(10px, 1vh);
 }
 
 .artist-list {
   width: 100%;
-  height: 100%;
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
   gap: 16px;
@@ -169,5 +148,6 @@ $transitionTime: 0.3s;
 .iconfont:hover {
   opacity: 1;
   transform: scale(1.1);
+  text-shadow: 2px 2px 2px rgba(0, 0, 0, 0.2);
 }
 </style>

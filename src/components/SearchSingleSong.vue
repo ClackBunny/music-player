@@ -12,7 +12,7 @@
 
     <!-- 列表项 -->
     <div
-        v-for="(song,index) in singleSongList"
+        v-for="(song,index) in data?.songs"
         :key="song.id"
         class="list-item"
     >
@@ -41,61 +41,19 @@
       </div>
 
     </div>
-
-    <a-pagination hideOnSinglePage
-                  show-quick-jumper
-                  v-model:current="currentPage"
-                  v-model:pageSize="pageSize"
-                  :total="totalCount"
-                  @change="onChangePage"/>
   </div>
 </template>
 
 <script setup lang="ts">
-import { search } from "@/api/search.ts";
-import { onMounted, ref, toRefs, watch } from "vue";
-import { getSongArtist, getSongTitle, type SongItem } from "@/type/type.ts";
+import { toRefs } from "vue";
+import { getSongArtist, getSongTitle } from "@/type/type.ts";
 import { secondsToMinutes } from "@/utils/utils.ts";
 import { addToPlayList, addToPlayListWithoutPic, handleFollow, handlePlay } from "@/utils/playControl.ts";
-import { type SearchApiResponse, SearchType, type SingleSongResultData } from "@/type/searchType.ts";
+import { type SingleSongResultData } from "@/type/searchType.ts";
 
-const props = defineProps<{ 'keyword': string, 'type': string }>();
-const {keyword, type} = toRefs(props);
-const emit = defineEmits(['send-count']);
+const props = defineProps<{ 'keyword': string, 'type': string, data: SingleSongResultData }>();
+const {data} = toRefs(props);
 
-const singleSongList = ref<SongItem[]>([])
-const totalCount = ref(0)
-const currentPage = ref(0)
-const pageSize = ref(10)
-
-console.log("单曲", keyword, type, totalCount);
-// 初始就获取数据并加载, 把count返回给父组件
-const loadData = async (keyword: string) => {
-  console.log("loadData", keyword);
-  let res = await search(keyword, SearchType.SINGLE_SONG) as SearchApiResponse;
-  const result = res.result as SingleSongResultData;
-  totalCount.value = result.songCount;
-  singleSongList.value = result.songs;
-  emit("send-count", totalCount.value);
-}
-
-function onChangePage(page: number) {
-  console.log(page);
-}
-
-onMounted(
-    () => {
-      loadData(keyword.value || '')
-    }
-)
-
-watch(() => keyword.value, loadData)
-watch(type, () => {
-  loadData(keyword.value)
-})
-watch(totalCount, () => {
-  emit("send-count", totalCount.value)
-})
 </script>
 
 <style scoped lang="scss">
@@ -187,6 +145,7 @@ $transitionTime: 0.4s;
   .iconfont:hover {
     opacity: 1;
     transform: scale(1.1);
+    text-shadow: 2px 2px 2px rgba(0, 0, 0, 0.2);
     color: #222;
   }
 }
@@ -200,6 +159,10 @@ $transitionTime: 0.4s;
 
 .list-header {
   border-radius: 0;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background-color: #fff;
 }
 
 

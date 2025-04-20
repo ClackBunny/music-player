@@ -51,13 +51,11 @@
             <a-slider v-model:value="playState.volume" :max="100" :min="0" :vertical="true"/>
           </div>
         </template>
-        <a-button
-            class="volume"
-            type="text"
-            :icon="h(SoundOutlined)"
-            @click="mute"
-        >
-        </a-button>
+        <div class="i-button">
+          <span class="volume iconfont"
+                :class="playState.volume>0?'kongxin-volume':'kongxin-mute'"
+                @click="mute"/>
+        </div>
       </a-popover>
       <!--  播放列表按钮-->
       <a-drawer
@@ -77,27 +75,16 @@
         </template>
         <PlayList/>
       </a-drawer>
-      <a-button
-          class="playList"
-          type="text"
-          :icon="h(MenuOutlined)"
-          @click="isPlayListOpen=!isPlayListOpen"
-      >
-      </a-button>
+      <div class="i-button">
+        <span class="iconfont kongxin-gedan playList" @click="isPlayListOpen=!isPlayListOpen"/>
+      </div>
     </div>
   </div>
 </template>
 
 <script lang="ts" setup>
 import { computed, h, nextTick, onMounted, ref, watch } from 'vue'
-import {
-  CaretRightOutlined,
-  LeftOutlined,
-  MenuOutlined,
-  PauseOutlined,
-  RightOutlined,
-  SoundOutlined,
-} from '@ant-design/icons-vue'
+import { CaretRightOutlined, LeftOutlined, PauseOutlined, RightOutlined, } from '@ant-design/icons-vue'
 import PlayList from "@/components/PlayList.vue";
 
 import { usePlayStateStore } from "@/stores/playState.ts";
@@ -124,14 +111,16 @@ const store = usePlayStateStore();
 const {playState, playList, isPlayListOpen} = storeToRefs(store);
 const musicSrc = ref("")
 const isPlaying = ref(false)
-
+// 播放进度
 const progress = ref(0)
 const changingProgress = ref(false)
+// 图标
 const pauseIcon = h(PauseOutlined);
 const playIcon = h(CaretRightOutlined)
 // progress最大值是duration,最小值0,step=1
 const currentTime = computed(() => secondsToMinutes(playState.value.current))
 const totalTime = computed(() => secondsToMinutes(playState.value.duration))
+
 
 const audio = ref()
 
@@ -225,7 +214,7 @@ nextTick(() => {
 </script>
 
 <style lang="scss" scoped>
-
+$transitionTime: 0.3s;
 .music-player {
   display: flex;
   justify-content: space-between;
@@ -310,11 +299,6 @@ nextTick(() => {
   .right {
     padding-right: 20px;
     justify-content: right;
-
-    .volume {
-      width: 50px;
-      height: 50px;
-    }
   }
 }
 
@@ -332,4 +316,31 @@ nextTick(() => {
     background-color: orange;
   }
 }
+
+.i-button {
+  padding: 10px;
+  transition: all $transitionTime;
+  border-radius: 5px;
+
+  &:hover {
+
+  }
+
+  .iconfont {
+    display: block;
+    cursor: pointer;
+    transition: transform $transitionTime;
+    font-size: 25px;
+    width: 25px;
+    height: 25px;
+    line-height: 25px; // 保证字体图标垂直居中
+  }
+
+  .iconfont:hover {
+    transform: scale(1.2);
+    color: #222;
+    text-shadow: 3px 3px 3px rgba(0, 0, 0, 0.2);
+  }
+}
+
 </style>

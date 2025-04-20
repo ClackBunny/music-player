@@ -10,7 +10,7 @@
     <div class="playCount">播放量</div>
   </div>
   <!--  歌单的列表-->
-  <div class="list-item" v-for="(songList,index) in listOfSongLists" :key="songList.id">
+  <div class="list-item" v-for="(songList,index) in data?.playlists" :key="songList.id">
     <div class="number">
       {{ index + 1 }}
     </div>
@@ -48,35 +48,14 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref, toRefs } from "vue";
-import { search } from "@/api/search.ts";
-import { SearchType, type SongListItem, type SongListResultData } from "@/type/searchType.ts";
+import { toRefs } from "vue";
+import { type SongListResultData } from "@/type/searchType.ts";
 import { addSongListToPlaylist, playSongList } from "@/utils/playControl.ts";
 import { handleCount } from "../utils/utils.ts";
 
-const props = defineProps<{ 'keyword': string, 'type': string }>();
-const {keyword, type} = toRefs(props);
-const emit = defineEmits(['send-count']);
+const props = defineProps<{ 'keyword': string, 'type': string, data: SongListResultData }>();
+const {data} = toRefs(props);
 
-const listOfSongLists = ref<SongListItem[]>([])
-const totalCount = ref(0)
-
-console.log("歌单", keyword, type);
-const loadData = async (keyword: string) => {
-  // message.loading("加载中")
-  const response = await search(keyword, SearchType.SONG_LIST, 0, 30);
-  const result = response.result as SongListResultData
-  totalCount.value = result.playlistCount;
-  listOfSongLists.value = result.playlists
-  emit("send-count", totalCount.value);
-}
-
-onMounted(
-    () => {
-      // console.log(keyword, type);
-      loadData(keyword.value);
-    }
-)
 </script>
 
 <style scoped lang="scss">
@@ -194,6 +173,7 @@ $transitionTime: 0.4s;
     .iconfont:hover {
       opacity: 1;
       transform: scale(1.1);
+      text-shadow: 2px 2px 2px rgba(0, 0, 0, 0.2);
       color: #222;
     }
   }
@@ -201,6 +181,10 @@ $transitionTime: 0.4s;
 
 .list-header {
   border-radius: 0;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background-color: #fff;
 }
 
 </style>

@@ -5,6 +5,7 @@
         colorPrimary: '#fc3d49',
       },
     }"
+      :locale="locale"
   >
     <div class="common-layout">
       <a-layout style="height: 100%;min-width: 700px;min-height: 500px;">
@@ -36,10 +37,10 @@ import Menu from "@/components/Menu.vue";
 import SearchHeader from "@/components/SearchHeader.vue";
 import { usePlayStateStore } from "@/stores/playState.ts";
 import { storeToRefs } from "pinia";
-
-const store =usePlayStateStore()
+import zhCN from 'ant-design-vue/es/locale/zh_CN'; // 中文语言包
+const store = usePlayStateStore()
 const {isPlayListOpen} = storeToRefs(store)
-
+const locale = zhCN; // 显式设置中文语言包
 </script>
 
 <style lang="scss" scoped>
@@ -47,6 +48,7 @@ const {isPlayListOpen} = storeToRefs(store)
   position: relative;
   left: -50vw;
 }
+
 .common-layout {
   position: absolute;
   top: 0;
@@ -54,8 +56,9 @@ const {isPlayListOpen} = storeToRefs(store)
   bottom: 0;
   left: 0;
   background-color: #c9ccd1;
-  min-height: 100vh;
-  min-width: 100vw;
+  min-height: 300px;
+  min-width: 400px;
+  height: 100vh;
 
   div {
     background: #fff;

@@ -1,13 +1,11 @@
-import { computed, h, ref } from 'vue'
+import { h, ref } from 'vue'
 import { defineStore } from 'pinia'
-import { CalendarOutlined, MailOutlined, SettingOutlined, } from '@ant-design/icons-vue'
 import { type MenuProps } from 'ant-design-vue';
 import { SearchType } from "@/type/searchType.ts";
 
 
 export const useSearchStore = defineStore('search', () => {
 
-    const keyword = ref<string>('')
     const routeMap = new Map([
         ["singleSong", "/search/singleSong"],
         ["songList", "/search/songList"],
@@ -23,32 +21,29 @@ export const useSearchStore = defineStore('search', () => {
     const menuItems = ref<MenuProps['items']>([
         {
             key: "singleSong",
-            icon: () => h(MailOutlined),
+            icon: () => h("span", {class: 'iconfont kongxin-music', style: {fontSize: '16px', height: '14px'}},),
             label: '单曲',
             title: '单曲',
         },
         {
             key: 'songList',
-            icon: () => h(CalendarOutlined),
+            icon: () => h("span", {class: 'iconfont kongxin-gedan', style: {fontSize: '16px', height: '16px'}},),
             label: '歌单',
             title: '歌单',
         },
         {
             key: 'singer',
-            icon: () => h(SettingOutlined),
+            icon: () => h("span", {class: 'iconfont kongxin-geshou1', style: {fontSize: '16px', height: '16px'}},),
             label: '歌手',
             title: '歌手',
         },
         {
             key: 'album',
-            icon: () => h(SettingOutlined),
+            icon: () => h("span", {class: 'iconfont kongxin-zhuanji', style: {fontSize: '16px', height: '16px'}},),
             label: '专辑',
             title: '专辑',
         }
     ]);
-    const hasKeywords = computed(() => {
-        return !!keyword?.value?.length
-    })
 
     /*
     * 获取menu对应key的路由*/
@@ -57,5 +52,5 @@ export const useSearchStore = defineStore('search', () => {
     }
 
 
-    return {keyword, hasKeywords, menuItems, routeMap, typeMap, getRoute};
+    return {menuItems, routeMap, typeMap, getRoute};
 })

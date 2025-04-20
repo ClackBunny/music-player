@@ -1,11 +1,10 @@
 @font-face {
   font-family: "iconfont"; /* Project id 4890160 */
-  src: url('iconfont.eot?t=1744884204735'); /* IE9 */
-  src: url('iconfont.eot?t=1744884204735#iefix') format('embedded-opentype'), /* IE6-IE8 */
-       url('iconfont.woff2?t=1744884204735') format('woff2'),
-       url('iconfont.woff?t=1744884204735') format('woff'),
-       url('iconfont.ttf?t=1744884204735') format('truetype'),
-       url('iconfont.svg?t=1744884204735#iconfont') format('svg');
+    src: url('iconfont.eot?t=1745141076435'); /* IE9 */
+    src: url('iconfont.eot?t=1745141076435#iefix') format('embedded-opentype'), /* IE6-IE8 */ url('iconfont.woff2?t=1745141076435') format('woff2'),
+    url('iconfont.woff?t=1745141076435') format('woff'),
+    url('iconfont.ttf?t=1745141076435') format('truetype'),
+    url('iconfont.svg?t=1745141076435#iconfont') format('svg');
 }
 
 .iconfont {
@@ -14,6 +13,30 @@
   font-style: normal;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+.kongxin-music:before {
+    content: "\e600";
+}
+
+.kongxin-zhuanji:before {
+    content: "\e60a";
+}
+
+.kongxin-gedan:before {
+    content: "\e636";
+}
+
+.kongxin-danqu:before {
+    content: "\e6ab";
+}
+
+.kongxin-geshou1:before {
+    content: "\e601";
+}
+
+.kongxin-a-yinlebofangliebiaoyinle:before {
+    content: "\e67e";
 }
 
 .kongxin-bofang:before {

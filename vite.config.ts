@@ -19,6 +19,8 @@ export default defineConfig(({mode}) => {
                 },
             },
             server: {
+                host: '0.0.0.0',
+                allowedHosts: ['music-player.frp.404notfound.cn'],
                 proxy: {
                     // 这里配置代理, 可以用envConfig里面配置
                     '/api': {

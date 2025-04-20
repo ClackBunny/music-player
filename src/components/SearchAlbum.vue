@@ -10,7 +10,7 @@
   </div>
 
   <!--  歌单的列表-->
-  <div class="list-item" v-for="(album,index) in albumList" :key="album.id">
+  <div class="list-item" v-for="(album,index) in data.albums" :key="album.id">
     <div class="number">
       {{ index + 1 }}
     </div>
@@ -41,39 +41,21 @@
 </template>
 
 <script setup lang="ts">
-import { search } from "@/api/search.ts";
-import { onMounted, ref, toRefs } from "vue";
-import { type AlbumResultData, SearchType } from "@/type/searchType.ts";
-import { type Album, getAlbumTitle } from "@/type/type.ts";
+import { toRefs } from "vue";
+import { type AlbumResultData } from "@/type/searchType.ts";
+import { getAlbumTitle } from "@/type/type.ts";
 import dayjs from "dayjs";
 import { addAlbumToPlaylist, playAlbum } from "@/utils/playControl.ts";
 
 // 定义组件入参props和自定义事件(send-count)
-const props = defineProps<{ 'keyword': string, 'type': string }>();
-const {keyword, type} = toRefs(props);
-const emit = defineEmits(['send-count']);
+const props = defineProps<{ 'keyword': string, 'type': string, data: AlbumResultData }>();
+const {data} = toRefs(props);
 
-const albumList = ref<Album[]>([])
-const totalCount = ref(0)
-
-console.log("专辑", keyword, type);
-
-const loadData = async (keyword: string) => {
-  let res = (await search(keyword, SearchType.ALBUM)).result as AlbumResultData;
-  albumList.value = res.albums;
-  totalCount.value = res.albumCount;
-  emit("send-count", totalCount.value);
-}
 
 function transformPublishTime(timeStamp: number | undefined) {
   return dayjs(timeStamp).format("YYYY-MM-DD");
 }
 
-onMounted(
-    () => {
-      loadData(keyword.value)
-    }
-)
 </script>
 
 <style scoped lang="scss">
@@ -178,6 +160,7 @@ $transitionTime: 0.3s;
     .iconfont:hover {
       opacity: 1;
       transform: scale(1.1);
+      text-shadow: 2px 2px 2px rgba(0, 0, 0, 0.2);
       color: #222;
     }
   }
@@ -185,6 +168,10 @@ $transitionTime: 0.3s;
 
 .list-header {
   border-radius: 0;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background-color: #fff;
 }
 
 .list-item {

@@ -6,6 +6,48 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "1029",
+      "name": "音乐",
+      "font_class": "music",
+      "unicode": "e600",
+      "unicode_decimal": 58880
+    },
+    {
+      "icon_id": "5849201",
+      "name": "专辑",
+      "font_class": "zhuanji",
+      "unicode": "e60a",
+      "unicode_decimal": 58890
+    },
+    {
+      "icon_id": "11391498",
+      "name": "歌单",
+      "font_class": "gedan",
+      "unicode": "e636",
+      "unicode_decimal": 58934
+    },
+    {
+      "icon_id": "13086864",
+      "name": "单曲",
+      "font_class": "danqu",
+      "unicode": "e6ab",
+      "unicode_decimal": 59051
+    },
+    {
+      "icon_id": "20020444",
+      "name": "歌手",
+      "font_class": "geshou1",
+      "unicode": "e601",
+      "unicode_decimal": 58881
+    },
+    {
+      "icon_id": "39608778",
+      "name": "音乐播放列表",
+      "font_class": "a-yinlebofangliebiaoyinle",
+      "unicode": "e67e",
+      "unicode_decimal": 59006
+    },
+    {
       "icon_id": "6263352",
       "name": "播放",
       "font_class": "bofang",
