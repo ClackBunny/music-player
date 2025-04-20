@@ -190,16 +190,30 @@ watch(
 watch(
     () => playState.value.musicUrl,
     (newVal) => {
-      audio.value.pause();
-      audio.value.src = newVal;
-      audio.value.play();
-      isPlaying.value = true;
-      // 切换封面和标题
-      const songItem = playList.value[playState.value.index];
-      song.value.albumId = songItem.album.id;
-      song.value.coverImgUrl = songItem.album.picUrl;
-      song.value.title = songItem.name;
-      song.value.artist = getSongArtist(songItem);
+      // 非空才开始播放
+      if (newVal) {
+        audio.value.pause();
+        audio.value.src = newVal;
+        audio.value.play();
+        isPlaying.value = true;
+        // 确定索引没有问题
+        if (playList.value.length > 0 && playState.value.index >= 0 && playState.value.index < playList.value.length) {
+          // 切换封面和标题
+          const songItem = playList.value[playState.value.index];
+          song.value.albumId = songItem.album.id;
+          song.value.coverImgUrl = songItem.album.picUrl;
+          song.value.title = songItem.name;
+          song.value.artist = getSongArtist(songItem);
+        }
+      } else {
+        //停止播放
+        audio.value.pause();
+        isPlaying.value = false;
+        playState.value.index = -1;
+        playState.value.duration = 0;
+        playState.value.current = 0;
+      }
+
     }
 )
 
