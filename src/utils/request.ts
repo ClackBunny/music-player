@@ -15,6 +15,9 @@ const store = useSeverLoadingStore(pinia);
 // 请求白名单：不显示 loading 的接口
 const loadingWhiteList: string[] = [];
 
+// 响应白名单, 不校验data中的code为200
+const responseWhiteList: string[] = ['/login/qr/check'];
+
 // 创建 Axios 实例
 const service: AxiosInstance = axios.create({
     baseURL: '/api',
@@ -64,7 +67,10 @@ service.interceptors.response.use(
         // ✅ 成功并返回 code === 200（业务成功）
         if (
             response.status === 200 &&
-            (response.data?.code === 200 || response.config.responseType === 'blob')
+            (response.data?.code === 200
+                || response.data?.data?.code === 200
+                || response.config.responseType === 'blob'
+                || responseWhiteList.includes(response.config.url || ''))
         ) {
             return response.data;
         } else {

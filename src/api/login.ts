@@ -15,10 +15,19 @@ type loginQrCreateApiResponse = {
     code: number
 }
 
+
 type loginQrCheckApiResponse = {
     code: number,
     message: string,
     cookie: string
+}
+
+type loginStatusApiResponse = {
+    data: {
+        code: number,
+        account: any,
+        profile: any
+    },
 }
 
 export function loginQrCheck(key: string,): Promise<loginQrCheckApiResponse> {
@@ -30,6 +39,10 @@ export function loginQrCheck(key: string,): Promise<loginQrCheckApiResponse> {
     })
 }
 
+/**
+ * 创建登录的二维码
+ * @param key
+ */
 export function loginQrCreate(key: string): Promise<loginQrCreateApiResponse> {
     console.log("在请求创建时,key=", key);
     return request.get('/login/qr/create', {
@@ -40,6 +53,27 @@ export function loginQrCreate(key: string): Promise<loginQrCreateApiResponse> {
     })
 }
 
-export function loginQrKey(): Promise<loginQrKeyApiResponse> {
-    return request.get<loginQrKeyApiResponse>('/login/qr/key', {})
+/**
+ * 生成登录用的key
+ * @param timeStamp
+ */
+export function loginQrKey(timeStamp: number = 0): Promise<loginQrKeyApiResponse> {
+    return request.get<loginQrKeyApiResponse>('/login/qr/key', {
+        params: {
+            timestamp: timeStamp,
+        }
+    })
+}
+
+/**
+ * 用户登录状态
+ *
+ * @param timeStamp
+ */
+export function loginStatus(timeStamp: number = 0): Promise<loginStatusApiResponse> {
+    return request.get<loginStatusApiResponse>('/login/status', {
+        params: {
+            timestamp: timeStamp,
+        }
+    })
 }
